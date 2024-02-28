@@ -1,0 +1,5 @@
+# TEST INSTANCES
+test.*
+
+# Cache
+__pycache__
