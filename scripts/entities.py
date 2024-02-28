@@ -56,8 +56,8 @@ class PhysicsEntity:
 
 
 
-    def render(self, surf):
-        surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), self.pos)
+    def render(self, surf, offset=[0,0]):
+        surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0], self.pos[1] - offset[1]))
 
     def update(self, tilemap, movement=(0,0)):
         self.collisions = {
@@ -101,6 +101,7 @@ class Player(PhysicsEntity):
         self.jumps = 2
         self.air_time = 0
         self.in_air = False
+        self.ANIMATION_OFFSET = [2,0]
 
     def update(self, tilemap, movement=(0, 0)):
         super().update(tilemap, movement)
@@ -128,3 +129,6 @@ class Player(PhysicsEntity):
             if (self.jumps != 2) or (self.jumps == 2 and (self.air_time < 10)):
                 self.velocity[1] = -3.1
                 self.jumps -= 1
+
+    def render(self, surf, offset=[0, 0]):
+            surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] - self.ANIMATION_OFFSET[0], self.pos[1] - offset[1] - self.ANIMATION_OFFSET[1]))
