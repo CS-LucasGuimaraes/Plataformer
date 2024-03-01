@@ -7,7 +7,7 @@ class Editor:
     def __init__(self):
         pygame.init()
 
-        self.screen_size = (pygame.display.Info().current_w, pygame.display.Info().current_h,)        
+        self.screen_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 
         self.screen = pygame.display.set_mode(self.screen_size)
         self.display = pygame.Surface((480, 270))

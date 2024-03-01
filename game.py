@@ -3,13 +3,20 @@ import pygame
 from scripts.tilemap import *
 from scripts.utils import load_image, load_images, Animation
 from scripts.entities import PhysicsEntity, Player
+from scripts.ui import UI
 
 class Game:
     def __init__(self):
         pygame.init()
 
-        self.screen = pygame.display.set_mode((1920,1080))
-        self.display = pygame.Surface((480, 270))
+        self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
+
+        # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
+        self.surface_size = (480,270)       
+
+
+        self.screen = pygame.display.set_mode((self.screen_size))
+        self.display = pygame.Surface(self.surface_size)
         self.clock = pygame.time.Clock()
 
         pygame.display.set_caption('pygame ip')
@@ -18,11 +25,10 @@ class Game:
         merge_dict = assets
 
         self.assets = {
-            'player/idle': Animation(load_images('entities/player/idle'), img_dur=6),
-            'player/run': Animation(load_images('entities/player/run'), img_dur=4),
-            'player/jump': Animation(load_images('entities/player/jump'), img_dur=5),
-            'player/slide': Animation(load_images('entities/player/slide'), img_dur=5),
-            'player/wall_slide': Animation(load_images('entities/player/wall_slide'), img_dur=5),
+            'player/idle': Animation(load_images('entities/blue/idle'), img_dur=16),
+            'player/run': Animation(load_images('entities/blue/run'), img_dur=6),
+            'player/jump': Animation(load_images('entities/blue/jump'), img_dur=5),
+            'player/wall_jump': Animation(load_images('entities/blue/wall_jump'), img_dur=5),
         }
 
         for k in merge_dict:
@@ -36,7 +42,7 @@ class Game:
         except FileNotFoundError:
             pass
         
-        self.player = Player(self, [96,40], [8,15])
+        self.player = Player(self, [96,40], [16,16])
 
         self.movement = [False, False]
 
@@ -48,6 +54,8 @@ class Game:
             'left': [pygame.K_a, pygame.K_LEFT],
             'jump': [pygame.K_w, pygame.K_UP, pygame.K_SPACE],
         }
+
+        self.ui = UI(self)
 
     def run(self):
         while True:
@@ -79,9 +87,11 @@ class Game:
             
             self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
             self.player.render(self.display, offset=render_scroll)
+            
+            self.ui.update()
+            self.screen.blit(pygame.transform.scale(self.display, self.screen_size), (0,0))
 
-            self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0,0))
-
+            self.ui.render(self.screen)
             pygame.display.update()
             
             self.clock.tick(60)

@@ -2,14 +2,19 @@ import pygame
 import json
 
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0, 0), (-1, 1), (0, 1), (1, 1)]
-PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'spike'}
+GATES = {'key_door'}
+PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'spike', 'key_door'}
 PLATAFORM_TILES = {'cloud_plataform', 'scaffolding'}
-ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key'}
+ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag'}
+COLLECTIBLES = {'coin', 'diamond', 'key'}
+DEATH_TILES = {'dye_point'}
 EDITOR_ONLY = {'dye_point'}
+POLES = {'mushroom'}
+CHECKPOINT = {'flag', 'flag_pole'}
 
 
 class Tilemap:
-    def __init__(self, game, tile_size=16):
+    def __init__(self, game, tile_size=18):
         self.game = game
         self.tile_size = tile_size
         self.tilemap = {}
@@ -53,13 +58,60 @@ class Tilemap:
                 tiles.append(self.tilemap[check_loc])
         return tiles
     
+    def checkpoints_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in CHECKPOINT:
+                rects.append((pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size),tile['pos']))
+        return rects
+    
+
+    def collectibles_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in COLLECTIBLES:
+                rects.append((pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size),tile['type'], (str(tile['pos'][0])) + ';' + str(tile['pos'][1])))
+        return rects
+    
+
+    def gates_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in GATES:
+                rects.append((pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size),tile['type'], (str(tile['pos'][0])) + ';' + str(tile['pos'][1])))
+        return rects
+    
+
     def physics_rects_around(self, pos):
         rects = []
         for tile in self.tiles_around(pos):
             if tile['type'] in PHYSICS_TILES:
+                if tile['type'] in POLES:
+                    rects.append(pygame.Rect(((tile['pos'][0] * self.tile_size) + (self.tile_size//3)), tile['pos'][1] * self.tile_size, self.tile_size//3, self.tile_size))
+                else:
+                    rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
+        return rects
+    
+
+    def plataform_rects_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in PLATAFORM_TILES:
+                if tile['type'] in POLES:
+                    rects.append(pygame.Rect(((tile['pos'][0] * self.tile_size) + (self.tile_size//3)), tile['pos'][1] * self.tile_size, self.tile_size//3, self.tile_size))
+                else:
+                    rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
+        return rects
+    
+
+    def death_rects_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in DEATH_TILES:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
         return rects
     
+
     def save(self, path):
         f = open(path, 'w')
         json.dump({'tilemap': self.tilemap, 'tile_size': self.tile_size, 'offgrid': self.offgrid_tiles}, f)
