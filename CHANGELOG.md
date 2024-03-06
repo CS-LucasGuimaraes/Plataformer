@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [0.0.4] - 2024-03-06 &ensp; \</lgf>
+
+### Added
+
+- Joystick integration: Implemented initial support for joysticks, starting with the Xbox Controller, providing players with alternative control options for a more comfortable and immersive experience.
+
+
+### Changed
+
+- Event verification order: Changed the order of the ``event.type`` verification. The most likely comes first, the others later. This can improve a little bit the performance.
+- Compartmented Game Functions: Now the ``Game`` Class has different functions to start each necessary part and to control the Game in ``run``. This makes the code easier to read and understand.
+- Compartmented Editor Functions: Now the ``Editor`` Class has different functions to start each necessary part and to control the editor in ``run``. This makes the code easier to read and understand.
+- Clear the code: Removed unnecessary prints.
+- New background: Changed the background color to a blue tone.
+- Better Collisions Functions: the collision_check functions are stored on a dict for better comprehension purposes.
+- Better function names: some ``entities`` functions were renamed for better understading. (i.e. side_plataform_collide_update -> any_came_from_bottom) 
+- Max jump controller: The player now has the ``self.max_jumps`` attribute to quickly change the number of maximum jumps instead of always being 2.
+
+
+
 ## [0.0.3] - 2024-03-06 &ensp; \</lgf>
 
 ### Added
@@ -14,10 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Introduced platform tiles: Implemented a new ``Platform Tile`` that only collides with players from the top and sides, not from below, enabling more creative and engaging platforming gameplay.
 - New platform elements: Expanded platform options with the addition of Cloud_plataforms and Scaffoldings.
 - Fullscreen: Automatic ``fullscreen`` based on the screen size for a more captivating gameplay experience.
-Enhanced visuals: Incorporated new player assets from [Kenney Platformer Art Pixel Redux](https://kenney.nl/assets/platformer-art-pixel-redux) to enrich the game's aesthetics.
+- Enhanced visuals: Incorporated new player assets from [Kenney Platformer Art Pixel Redux](https://kenney.nl/assets/platformer-art-pixel-redux) to enrich the game's aesthetics.
 - Improved physics: Implemented functions for precise x and y collision detection for physics_tiles and plataform_tiles, enhancing gameplay feel.
 - New in-game assets: Loaded new assets into the game, enabling the use of animated tiles.
-Tile animations: Added animations for more tiles like flags, water, and keys, enhancing their visual appeal.
+- Tile animations: Added animations for more tiles like flags, water, and keys, enhancing their visual appeal.
 - Health System: Added a health system with 3 hearts displayed on a dedicated UI script. Players lose a heart upon colliding with death tiles (e.g., world borders).
 - ``DEATH_TILES`` type: This new tile type kills the player and respawns them at thelast checkpoint.
 - Enhanced Rendering: Enhanced the tilemap rendering to support both game and editor modes. Editor mode displays EDITOR_ONLY tiles, while game mode hides them.

@@ -24,6 +24,8 @@ class Tilemap:
         self.EDITOR_ONLY = EDITOR_ONLY
 
     def render(self, surf, offset=[0,0], mode='game'):
+        surf.fill((165,229,255))
+
         for tile in self.offgrid_tiles:
             surf.blit(self.game.assets[tile['type']][tile['variant']], (tile['pos'][0] - offset[0], tile['pos'][1] - offset[1]))
 
