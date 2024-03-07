@@ -38,7 +38,7 @@ class PhysicsEntity:
         return pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
     
 
-    def any_came_from_bottom(self, entity_rect):
+    def inside_plataform(self, entity_rect):
         for i in self.came_from_bottom:
             if self.came_from_bottom[i]:
                 return True
@@ -85,14 +85,13 @@ class PhysicsEntity:
             entity_rect = self.rect()
             for rect in tilemap.physics_rects_around(self.pos):
                 if entity_rect.colliderect(rect):
-                    if not self.any_came_from_bottom(entity_rect):
-                        if frame_movement[0] > 0:
-                            self.collisions['right'] = True
-                            entity_rect.right = rect.left
-                        elif frame_movement[0] < 0:
-                            self.collisions['left'] = True
-                            entity_rect.left = rect.right
-                        self.pos[0] = entity_rect.x
+                    if frame_movement[0] > 0:
+                        self.collisions['right'] = True
+                        entity_rect.right = rect.left
+                    elif frame_movement[0] < 0:
+                        self.collisions['left'] = True
+                        entity_rect.left = rect.right
+                    self.pos[0] = entity_rect.x
         
 
         def physics_tiles_collisions_Y(self, tilemap, frame_movement):
@@ -112,7 +111,7 @@ class PhysicsEntity:
             entity_rect = self.rect()
             for rect in tilemap.plataform_rects_around(self.pos):
                 if entity_rect.colliderect(rect):                   # CHECKS RECT COLISION FOR IT OF THEN
-                    if not self.any_came_from_bottom(entity_rect):
+                    if not self.inside_plataform(entity_rect):
                         if frame_movement[0] < 0:
                             self.collisions['left'] = True
                             entity_rect.left = rect.right               # THE LEFT OF THE ENTITY BECAMES THE RIGHT OF THE RECT
@@ -131,12 +130,12 @@ class PhysicsEntity:
 
                 if entity_rect.colliderect(rect):
 
-                    if (frame_movement[1] <= 0) or self.any_came_from_bottom(entity_rect):
+                    if (frame_movement[1] <= 0) or self.inside_plataform(entity_rect):
                         for key in self.came_from_bottom:
                             self.came_from_bottom[key] = True
                     
                     elif (frame_movement[1] > 0):
-                        if not self.any_came_from_bottom(entity_rect):
+                        if not self.inside_plataform(entity_rect):
                             entity_rect.bottom = rect.top
                             self.collisions['down'] = True
                             self.pos[1] = entity_rect.y
@@ -246,7 +245,6 @@ class Player(PhysicsEntity):
             self.jumps = self.max_jumps
             self.air_time = 0
             self.in_air = False
-            self.came_from_bottom = {}
 
     def action_control(self, movement):
         if self.in_air:

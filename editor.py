@@ -186,9 +186,9 @@ class Editor:
             self.camera_control()
 
             tile_pos = self.get_tile_pos()
-            self.tile_preview(tile_pos)
-            self.tilemap_update(tile_pos)            
             self.tilemap.render(self.display, offset=self.scroll, mode='editor')
+            self.tilemap_update(tile_pos)            
+            self.tile_preview(tile_pos)
             
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0,0))
 
