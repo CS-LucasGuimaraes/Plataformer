@@ -6,15 +6,22 @@ from scripts.entities import PhysicsEntity, Player
 from scripts.ui import UI
 
 class Game:
-    def init_window(self):
-        self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
+    def init_window(self, screen, display, screen_size, surface_size):
+        # self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 
         # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
-        self.surface_size = (480,270)       
+        # self.surface_size = (480,270)       
 
-        self.screen = pygame.display.set_mode((self.screen_size))
-        self.display = pygame.Surface(self.surface_size)
+        # self.screen = pygame.display.set_mode((self.screen_size))
+        # self.display = pygame.Surface(self.surface_size)
         
+        self.screen_size = screen_size
+        self.surface_size = surface_size
+        
+        self.screen = screen
+        self.display = display
+
+
         pygame.display.set_caption('pygame ip')
 
 
@@ -46,10 +53,10 @@ class Game:
         merge_dict = assets
 
         self.assets = {
-            'player/idle': Animation(load_images('entities/blue/idle'), img_dur=16),
-            'player/run': Animation(load_images('entities/blue/run'), img_dur=6),
-            'player/jump': Animation(load_images('entities/blue/jump'), img_dur=5),
-            'player/wall_jump': Animation(load_images('entities/blue/wall_jump'), img_dur=5),
+            'player/idle': Animation(load_images('entities/' + self.player_color +'/idle'), img_dur=16),
+            'player/run': Animation(load_images('entities/' + self.player_color + '/run'), img_dur=6),
+            'player/jump': Animation(load_images('entities/' + self.player_color + '/jump'), img_dur=5),
+            'player/wall_jump': Animation(load_images('entities/' + self.player_color + '/wall_jump'), img_dur=5),
         }
 
         for k in merge_dict:
@@ -69,10 +76,12 @@ class Game:
         self.movement = [False, False]
 
 
-    def __init__(self):
+    def __init__(self, player_color, screen_size, surface_size, screen, display):
         pygame.init()
 
-        self.init_window()
+        self.player_color = player_color
+
+        self.init_window(screen_size, surface_size, screen, display)
         self.init_joy()
         self.init_binds()
         self.init_assets()
@@ -153,4 +162,4 @@ class Game:
             self.clock.tick(60)
 
 
-Game().run()  # Start the program execution
+# Game().run()  # Start the program execution
