@@ -3,11 +3,12 @@ import json
 
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0, 0), (-1, 1), (0, 1), (1, 1)]
 GATES = {'key_door'}
-PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'spike', 'key_door'}
+PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'key_door'}
 PLATAFORM_TILES = {'cloud_plataform', 'scaffolding'}
 ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag'}
 COLLECTIBLES = {'coin', 'diamond', 'key'}
 DEATH_TILES = {'dye_point'}
+SPIKES = {'spike'}
 EDITOR_ONLY = {'dye_point'}
 POLES = {'mushroom'}
 CHECKPOINT = {'flag', 'flag_pole'}
@@ -60,6 +61,26 @@ class Tilemap:
                 tiles.append(self.tilemap[check_loc])
         return tiles
     
+
+    def check_fall_right(self, pos):
+        tiles = []
+        tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        for offset in [(1,1)]:
+            check_loc = str(tile_loc[0]+ offset[0]) + ';' + str(tile_loc[1]+offset[1])
+            if check_loc in self.tilemap:
+                tiles.append(self.tilemap[check_loc])
+        return tiles
+    
+    def check_fall_left(self, pos):
+        tiles = []
+        tile_loc = (int(pos[0] // self.tile_size), int(pos[1] // self.tile_size))
+        for offset in [(-1,1)]:
+            check_loc = str(tile_loc[0]+ offset[0]) + ';' + str(tile_loc[1]+offset[1])
+            if check_loc in self.tilemap:
+                tiles.append(self.tilemap[check_loc])
+        return tiles
+    
+
     def checkpoints_around(self, pos):
         rects = []
         for tile in self.tiles_around(pos):
@@ -111,6 +132,13 @@ class Tilemap:
         for tile in self.tiles_around(pos):
             if tile['type'] in DEATH_TILES:
                 rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size))
+        return rects
+
+    def spike_rects_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in SPIKES:
+                rects.append(pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size/2))
         return rects
     
 

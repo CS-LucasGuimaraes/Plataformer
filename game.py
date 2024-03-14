@@ -2,14 +2,14 @@ import pygame
 
 from scripts.tilemap import *
 from scripts.utils import load_image, load_images, Animation
-from scripts.entities import PhysicsEntity, Player
+from scripts.entities import PhysicsEntity, Player, enemy
 from scripts.ui import UI
 
 class Game:
     def init_window(self):
         self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 
-        # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
+        self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
         self.surface_size = (480,270)       
 
         self.screen = pygame.display.set_mode((self.screen_size))
@@ -50,6 +50,8 @@ class Game:
             'player/run': Animation(load_images('entities/blue/run'), img_dur=6),
             'player/jump': Animation(load_images('entities/blue/jump'), img_dur=5),
             'player/wall_jump': Animation(load_images('entities/blue/wall_jump'), img_dur=5),
+            'enemy/idle': Animation(load_images('entities/enemy/run'), img_dur=4),
+            'enemy/run': Animation(load_images('entities/enemy/run'), img_dur=4),
         }
 
         for k in merge_dict:
@@ -82,6 +84,8 @@ class Game:
         self.scroll = [0,0]
 
         self.ui = UI(self)
+
+        self.enemy = enemy(self, [120,0], [8,16], self.player)
 
 
     def camera_control(self):
@@ -139,8 +143,12 @@ class Game:
             self.process_events()
             
             render_scroll = self.camera_control()
-
+            
             self.tilemap.render(self.display, offset=render_scroll, mode='game')
+
+            self.enemy.update(self.tilemap, self.player.rect())
+            self.enemy.render(self.display, offset=render_scroll)
+            
             self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
             self.player.render(self.display, offset=render_scroll)
             

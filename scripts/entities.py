@@ -126,7 +126,7 @@ class PhysicsEntity:
 
             self.came_from_bottom = {(a,b):self.came_from_bottom.get((a,b), False) for (a,b) in [getxy(k) for k in tilemap.plataform_rects_around(self.pos)]}
             
-            for rect in tilemap.plataform_rects_around(self.pos):
+            for rect     in tilemap.plataform_rects_around(self.pos):
 
                 if entity_rect.colliderect(rect):
 
@@ -153,8 +153,50 @@ class PhysicsEntity:
                     self.flip = False
                     self.hearts -= 1
                     return 0
+        
+        def spike_tiles_collisions_X(self, tilemap, frame_movement):
+            entity_rect = self.rect()
+            if self.type != 'player':
+                for rect in tilemap.spike_rects_around(self.pos):
+                    if entity_rect.colliderect(rect):
+                        if frame_movement[0] > 0:
+                            self.collisions['right'] = True
+                            entity_rect.right = rect.left
+                        elif frame_movement[0] < 0:
+                            self.collisions['left'] = True
+                            entity_rect.left = rect.right
+                        self.pos[0] = entity_rect.x
 
-        return {'checkpoint': checkpoint_collisions, 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions}
+            elif self.type == 'player':
+                for rect in tilemap.spike_rects_around(self.pos):
+                    if entity_rect.colliderect(rect):
+                        self.pos = self.checkpoint.copy()
+                        self.flip = False
+                        self.hearts -= 1
+                        return 0
+            
+        def spike_tiles_collisions_Y(self, tilemap, frame_movement):
+            entity_rect = self.rect()
+            if self.type != 'player':
+                for rect in tilemap.spike_rects_around(self.pos):
+                    if entity_rect.colliderect(rect):
+                        if frame_movement[1] < 0:
+                            self.collisions['up'] = True
+                            entity_rect.top = rect.bottom
+                        elif frame_movement[1] > 0:
+                            self.collisions['down'] = True
+                            entity_rect.bottom = rect.top
+                        self.pos[1] = entity_rect.y
+            
+            elif self.type == 'player':
+                for rect in tilemap.spike_rects_around(self.pos):
+                    if entity_rect.colliderect(rect):
+                        self.pos = self.checkpoint.copy()
+                        self.flip = False
+                        self.hearts -= 1
+                        return 0
+
+        return {'checkpoint': checkpoint_collisions, 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
 
 
     def movement_physics(self):
@@ -187,7 +229,8 @@ class PhysicsEntity:
             self.collide['checkpoint'](self, tilemap)
         self.collide['plataform_X'](self, tilemap, frame_movement)
         self.collide['physics_X'](self, tilemap, frame_movement)
-        
+        self.collide['spike_X'](self, tilemap, frame_movement)
+
         
         self.pos[1] += frame_movement[1]
         if self.type == 'player':
@@ -196,6 +239,7 @@ class PhysicsEntity:
             self.collide['checkpoint'](self, tilemap)
         self.collide['plataform_Y'](self, tilemap, frame_movement)
         self.collide['physics_Y'](self, tilemap, frame_movement)
+        self.collide['spike_Y'](self, tilemap, frame_movement)
 
         self.collide['death'](self, tilemap)
 
@@ -287,3 +331,31 @@ class Player(PhysicsEntity):
 
     def render(self, surf, offset=[0, 0]):
             surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] - self.ANIMATION_OFFSET[0], self.pos[1] - offset[1] - self.ANIMATION_OFFSET[1]))
+
+class enemy(PhysicsEntity):
+    def __init__(self, game, pos, size, player):
+        self.player = player
+        super().__init__(game, 'enemy', pos, size)
+
+    def update(self, tilemap, player):
+        if self.rect().colliderect(player):
+            self.player.hearts -= 1
+            self.player.pos = self.player.checkpoint.copy()
+            self.player.flip = False
+            
+    
+    
+        if not self.flip:
+            if self.collisions['right'] or not tilemap.check_fall_right(self.pos):
+                self.flip = not self.flip
+            else:
+                return super().update(tilemap, (0.6,0))
+            
+        else:
+            if self.collisions['left'] or not tilemap.check_fall_left(self.pos):
+                self.flip = not self.flip
+            else:
+                return super().update(tilemap, (-0.6,0))
+
+        return super().update(tilemap, (0,0))
+

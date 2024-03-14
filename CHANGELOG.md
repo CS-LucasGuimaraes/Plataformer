@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.6] - 2024-03-14 &ensp; \</~lgf>
+
+### Added
+
+- Enemies: Added an enemy class that renders a Mario-like enemy.
+- Spikes: Now, the spikes as a propper hitbox and kill the player on collision.
+
+
+
 ## [0.0.5] - 2024-03-07 &ensp; \</~lgf>
 
 ### Changed
