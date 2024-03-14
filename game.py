@@ -85,7 +85,7 @@ class Game:
 
         self.ui = UI(self)
 
-        self.enemy = enemy(self, [120,0], [8,16], self.player)
+        self.enemies = []
 
 
     def camera_control(self):
@@ -146,8 +146,9 @@ class Game:
             
             self.tilemap.render(self.display, offset=render_scroll, mode='game')
 
-            self.enemy.update(self.tilemap, self.player.rect())
-            self.enemy.render(self.display, offset=render_scroll)
+            for enemy in self.enemies:
+                enemy.update(self.tilemap, self.player.rect())
+                enemy.render(self.display, offset=render_scroll)
             
             self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
             self.player.render(self.display, offset=render_scroll)

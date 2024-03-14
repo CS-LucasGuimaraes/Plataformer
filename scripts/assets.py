@@ -34,4 +34,5 @@ assets = {
             'spike': load_images('tiles/spike'),
             'snowman': load_images('tiles/snowman'),
             'dye_point': load_images('tiles/dye_point'),
+            'enemy': load_images('tiles/enemy'),
         }

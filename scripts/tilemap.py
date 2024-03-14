@@ -1,6 +1,8 @@
 import pygame
 import json
 
+from scripts.entities import enemy
+
 NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0, 0), (-1, 1), (0, 1), (1, 1)]
 GATES = {'key_door'}
 PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'key_door'}
@@ -9,7 +11,7 @@ ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag'}
 COLLECTIBLES = {'coin', 'diamond', 'key'}
 DEATH_TILES = {'dye_point'}
 SPIKES = {'spike'}
-EDITOR_ONLY = {'dye_point'}
+EDITOR_ONLY = {'dye_point', 'enemy'}
 POLES = {'mushroom'}
 CHECKPOINT = {'flag', 'flag_pole'}
 
@@ -48,6 +50,10 @@ class Tilemap:
                             self.game.assets[tile['type']][0].set_alpha(100)
                             surf.blit(self.game.assets[tile['type']][0],
                                 (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size -offset[1]))
+                        else:
+                            if tile['type'] == 'enemy':
+                                self.game.enemies.append((enemy(self.game, [tile['pos'][0]*self.tile_size, tile['pos'][1]*self.tile_size], [8,16], self.game.player)))
+                                del self.tilemap[loc]
                     else:
                         surf.blit(self.game.assets[tile['type']][tile['variant']],
                                 (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size -offset[1]))
