@@ -1,5 +1,4 @@
-import os
-
+import os, json
 import pygame
 
 BASE_IMG_PATH = 'data/images/'
@@ -46,11 +45,22 @@ class Animation():
 
     def img(self):
         return self.images[int(self.frame/self.img_duration)]
-    
+
+def json_dump(game):
+    f = open('saves/'+ str(game.save) +'.json', 'w')
+    json.dump({'current_level': game.current_level,
+               'current_hearts': game.player.hearts,
+               'current_collectibles': game.player.collectibles,
+               }, f)
+    f.close()
+
 def restart_level(game, next_level=False):
     if next_level: 
         game.current_level += 1
         pygame.mixer.Sound.play(game.sounds['next_level'])
+
+        json_dump(game)
+
     game.enemies = []
     game.tilemap.load('levels/level'+str(game.current_level)+'.json')
     game.player.checkpoint = game.tilemap.spawn_point.copy()

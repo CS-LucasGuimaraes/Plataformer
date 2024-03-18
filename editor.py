@@ -6,7 +6,7 @@ class Editor:
     def init_window(self):
         self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 
-        self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
+        # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
         self.surface_size = (480,270)       
 
         self.screen = pygame.display.set_mode((self.screen_size))
@@ -68,7 +68,7 @@ class Editor:
     def __init__(self):
         pygame.init()
 
-        level = input("Wich level do you want to edit? ")
+        level = input("Which level do you want to edit? ")
 
         self.map = 'levels/level'+level+'.json'
 

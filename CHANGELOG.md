@@ -7,12 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.0.12] - 2024-03-18 &ensp; \</~lgf>
+
+### Added
+
+- Main menu: Added a complete main menu, that let the player choose the save that he wants to use or to start a new game.
+
+### Changed
+
+- Saving system: Now, the saving system stores the attributes of the player. 4 Saves are Available.
+
+
 ## [0.0.11] - 2024-03-18 &ensp; \</~lgf>
 
 ### Changed
 
 - Enemy Sprites: Changed the enemy sprites to fit the game theme.
-
 
 
 ## [0.0.10] - 2024-03-18 &ensp; \</~mdon>
@@ -24,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - BUGFIX: Restart Function order was changed to fix a bug when the player dies at the place that a enemy would spawn.
+
 
 ## [0.0.9] - 2024-03-18 &ensp; \</~lgf>
 

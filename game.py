@@ -1,20 +1,19 @@
 import pygame
 
 from scripts.tilemap import *
-from scripts.utils import load_image, load_images, Animation
+from scripts.utils import load_image, load_images, Animation, restart_level
 from scripts.entities import PhysicsEntity, Player, enemy
 from scripts.ui import UI
 
 class Game:
-    def init_window(self):
-        self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
-
-        # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
-        self.surface_size = (480,270)       
-
-        self.screen = pygame.display.set_mode((self.screen_size))
-        self.display = pygame.Surface(self.surface_size)
+    def init_window(self, screen, display, screen_size, surface_size):
+        self.screen_size = screen_size
+        self.surface_size = surface_size
         
+        self.screen = screen
+        self.display = display
+
+
         pygame.display.set_caption('pygame ip')
 
 
@@ -41,15 +40,15 @@ class Game:
         }
 
 
-    def init_assets(self):
+    def init_assets(self, player_color):
         from scripts.assets import assets, sounds
         merge_dict = assets
 
         self.assets = {
-            'player/idle': Animation(load_images('entities/blue/idle'), img_dur=16),
-            'player/run': Animation(load_images('entities/blue/run'), img_dur=6),
-            'player/jump': Animation(load_images('entities/blue/jump'), img_dur=5),
-            'player/wall_jump': Animation(load_images('entities/blue/wall_jump'), img_dur=5),
+            'player/idle': Animation(load_images('entities/' + player_color +'/idle'), img_dur=16),
+            'player/run': Animation(load_images('entities/' + player_color + '/run'), img_dur=6),
+            'player/jump': Animation(load_images('entities/' + player_color + '/jump'), img_dur=5),
+            'player/wall_jump': Animation(load_images('entities/' + player_color + '/wall_jump'), img_dur=5),
             'enemy/idle': Animation(load_images('entities/enemy/run'), img_dur=3),
             'enemy/run': Animation(load_images('entities/enemy/run'), img_dur=3),
         }
@@ -69,23 +68,27 @@ class Game:
     def init_player(self):
         self.player = Player(self, self.tilemap.spawn_point.copy(), [16,16])
         self.movement = [False, False]
+        self.player.hearts = self.data['current_hearts']
+        self.player.collectibles['coin'] = self.data['current_collectibles']['coin']
+        self.player.collectibles['diamond'] = self.data['current_collectibles']['diamond']
+        self.player.collectibles['key'] = self.data['current_collectibles']['key']
 
     def init_save(self, save):
+        self.save = save
+
         f = open('saves/'+str(save)+'.json', 'r')
-        data = json.load(f)
+        self.data = json.load(f)
         f.close()
 
-        self.current_level = data['current_level']
+        self.current_level = self.data['current_level']
 
 
-    def __init__(self):
-        pygame.init()
-
-        self.init_window()
-        self.init_save(1)
+    def __init__(self, player_color, screen_size, surface_size, screen, display, save):
+        self.init_window(screen, display, screen_size, surface_size)
+        self.init_save(save)
         self.init_joy()
         self.init_binds()
-        self.init_assets()
+        self.init_assets(player_color)
         self.init_player()
 
         self.clock = pygame.time.Clock()
@@ -182,4 +185,4 @@ class Game:
             self.clock.tick(60)
 
 
-Game().run()  # Start the program execution
+# Game().run()  # Start the program execution

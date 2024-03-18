@@ -8,7 +8,6 @@ assets = {
     'cloud_plataform' : load_images('tiles/cloud_plataform'),
     'scaffolding': load_images('tiles/scaffolding'),
     'boxes': load_images('tiles/boxes'),
-    'button': load_images('tiles/button'),
     'coin': (Animation(load_images('tiles/coin'), img_dur=15)),
     'diamond': (Animation(load_images('tiles/diamond'), img_dur=15)),
     'crates': load_images('tiles/crates'),
