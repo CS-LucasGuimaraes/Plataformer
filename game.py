@@ -86,6 +86,7 @@ class Game:
         self.ui = UI(self)
 
         self.enemies = []
+        self.pop_list = []
 
     def camera_control(self):
         self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) //30
@@ -147,9 +148,15 @@ class Game:
 
             for index in range(len(self.enemies)):
                 enemy = self.enemies[index]
-                enemy.update(self.tilemap, self.player.rect(), index)
+                enemy.update(self.tilemap, self.player, index, (self.movement[1]-self.movement[0],0))
                 enemy.render(self.display, offset=render_scroll)
             
+            self.pop_list.sort(reverse=True)
+
+            for index in self.pop_list:
+                self.enemies.pop(index)
+            self.pop_list=[]
+
             self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
             self.player.render(self.display, offset=render_scroll)
             
