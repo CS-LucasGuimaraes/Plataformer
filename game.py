@@ -50,8 +50,8 @@ class Game:
             'player/run': Animation(load_images('entities/blue/run'), img_dur=6),
             'player/jump': Animation(load_images('entities/blue/jump'), img_dur=5),
             'player/wall_jump': Animation(load_images('entities/blue/wall_jump'), img_dur=5),
-            'enemy/idle': Animation(load_images('entities/enemy/run'), img_dur=4),
-            'enemy/run': Animation(load_images('entities/enemy/run'), img_dur=4),
+            'enemy/idle': Animation(load_images('entities/enemy/run'), img_dur=3),
+            'enemy/run': Animation(load_images('entities/enemy/run'), img_dur=3),
         }
 
         for k in merge_dict:

@@ -53,7 +53,7 @@ class Tilemap:
                                 (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size -offset[1]))
                         else:
                             if tile['type'] == 'enemy':
-                                self.game.enemies.append((enemy(self.game, [tile['pos'][0]*self.tile_size, tile['pos'][1]*self.tile_size], [8,16], self.game.player)))
+                                self.game.enemies.append((enemy(self.game, [tile['pos'][0]*self.tile_size, tile['pos'][1]*self.tile_size], [15,14], self.game.player)))
                             
                             if tile['type'] not in DEATH_TILES:
                                 del self.tilemap[loc]
