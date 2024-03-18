@@ -1,7 +1,6 @@
 import pygame
 
 from scripts.utils import getxy
-
 class PhysicsEntity:
     def __init__(self, game, e_type, pos, size):
         self.game = game
@@ -337,14 +336,15 @@ class enemy(PhysicsEntity):
         self.player = player
         super().__init__(game, 'enemy', pos, size)
 
-    def update(self, tilemap, player):
+    def update(self, tilemap, player, index):
         if self.rect().colliderect(player):
-            self.player.hearts -= 1
-            self.player.pos = self.player.checkpoint.copy()
-            self.player.flip = False
-            
-    
-    
+            if self.collisions['left'] or self.collisions['right']:
+                self.player.hearts -= 1
+                self.player.pos = self.player.checkpoint.copy()
+                self.player.flip = False
+            if self.collisions['up']:
+                self.game.enemies.pop(index)
+                
         if not self.flip:
             if self.collisions['right'] or not tilemap.check_fall_right(self.pos):
                 self.flip = not self.flip
