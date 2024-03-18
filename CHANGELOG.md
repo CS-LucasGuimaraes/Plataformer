@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.10] - 2024-03-18 &ensp; \</~mdon>
+
+### Added
+
+- Enemy collisions: Now, the enemy just kill the player if the collision occurs from one of the sides or from bottom-up. Otherwise (if the collision is top-down), the enemy is killed.
+
+### Changed
+
+- BUGFIX: Restart Function order was changed to fix a bug when the player dies at the place that a enemy would spawn.
+
 ## [0.0.9] - 2024-03-18 &ensp; \</~lgf>
 
 ### Added

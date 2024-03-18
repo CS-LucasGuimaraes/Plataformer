@@ -1,7 +1,6 @@
 import pygame
 
 from scripts.utils import getxy, restart_level
-
 class PhysicsEntity:
     def __init__(self, game, e_type, pos, size):
         self.game = game
@@ -293,7 +292,7 @@ class Player(PhysicsEntity):
         self.air_time = 0
         self.in_air = False
         self.ANIMATION_OFFSET = [2,0]
-        self.checkpoint = list(pos)
+        self.checkpoint = list(pos).copy()
         self.collectibles = {'key': 0, 'coin': 0, 'diamond': 0}
 
     def jump_control(self):
@@ -370,15 +369,31 @@ class enemy(PhysicsEntity):
         self.player = player
         super().__init__(game, 'enemy', pos, size)
 
-    def update(self, tilemap, player):
-        if self.rect().colliderect(player):
-            self.game.sounds['damage'].play()
-            self.player.hearts -= 1
-            self.player.pos = self.player.checkpoint.copy()
-            self.player.flip = False
+    def update(self, tilemap, player, index, player_movement):
+        if self.rect().colliderect(player.rect()):
+            frame_movement = (player_movement[0] + player.velocity[0], player_movement[1] + player.velocity[1])
+
+
+            if frame_movement[1] > 0 and (player.pos[1] <= self.pos[1]-self.size[1] + 2 or player.pos[1] <= self.pos[1]-self.size[1] - 2):
+                self.collisions['up'] = True
+            elif frame_movement[1] < 0:
+                self.collisions['down'] = True
             
-    
-    
+            if frame_movement[0] < 0:
+                self.collisions['right'] = True
+            elif frame_movement[0] > 0:
+                self.collisions['left'] = True
+
+            if self.collisions['up']:
+                self.game.sounds['jump'].play()
+                player.velocity[1] = -2
+                self.game.pop_list.append(index)
+            elif self.collisions['left'] or self.collisions['right'] or self.collisions['down']:
+                self.game.sounds['damage'].play()
+                self.player.hearts -= 1
+                self.player.pos = self.player.checkpoint.copy()
+                self.player.flip = False
+                
         if not self.flip:
             if self.collisions['right'] or not tilemap.check_fall_right(self.pos):
                 self.flip = not self.flip

@@ -53,5 +53,5 @@ def restart_level(game, next_level=False):
         pygame.mixer.Sound.play(game.sounds['next_level'])
     game.enemies = []
     game.tilemap.load('levels/level'+str(game.current_level)+'.json')
-    game.player.pos = game.tilemap.spawn_point
-    game.player.checkpoint = game.player.pos
+    game.player.checkpoint = game.tilemap.spawn_point.copy()
+    game.player.pos = game.player.checkpoint.copy()

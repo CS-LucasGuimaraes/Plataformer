@@ -67,7 +67,7 @@ class Game:
         #     pass
 
     def init_player(self):
-        self.player = Player(self, self.tilemap.spawn_point, [16,16])
+        self.player = Player(self, self.tilemap.spawn_point.copy(), [16,16])
         self.movement = [False, False]
 
     def init_save(self, save):
@@ -98,6 +98,7 @@ class Game:
         self.sounds['ambience'].set_volume(0.3)
         self.sounds['ambience'].play(-1)
         self.sounds['music'].play(-1)
+        self.pop_list = []
 
     def camera_control(self):
         self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) //30
@@ -158,10 +159,17 @@ class Game:
             
             self.tilemap.render(self.display, offset=render_scroll, mode='game')
 
-            for enemy in self.enemies:
-                enemy.update(self.tilemap, self.player.rect())
+            for index in range(len(self.enemies)):
+                enemy = self.enemies[index]
+                enemy.update(self.tilemap, self.player, index, (self.movement[1]-self.movement[0],0))
                 enemy.render(self.display, offset=render_scroll)
             
+            self.pop_list.sort(reverse=True)
+
+            for index in self.pop_list:
+                self.enemies.pop(index)
+            self.pop_list=[]
+
             self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
             self.player.render(self.display, offset=render_scroll)
             
