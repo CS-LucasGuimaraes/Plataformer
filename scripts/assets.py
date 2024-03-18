@@ -17,6 +17,8 @@ assets = {
             'fence': load_images('tiles/fence'),
             'flag': (Animation(load_images('tiles/flag'), img_dur=35)),
             'flag_pole': load_images('tiles/flag_pole'),
+            'blue_flag': (Animation(load_images('tiles/blue_flag'), img_dur=35)),
+            'blue_flag_pole': load_images('tiles/blue_flag_pole'),
             'ice1': load_images('tiles/ice1'),
             'ice2': load_images('tiles/ice2'),
             'tree': load_images('tiles/tree'),
@@ -35,4 +37,5 @@ assets = {
             'snowman': load_images('tiles/snowman'),
             'dye_point': load_images('tiles/dye_point'),
             'enemy': load_images('tiles/enemy'),
+            'spawn_point': load_images('tiles/spawn_point'),
         }

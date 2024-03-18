@@ -60,21 +60,28 @@ class Game:
 
         self.tilemap = Tilemap(self)
 
-        try:
-            self.tilemap.load('map.json')
-        except FileNotFoundError:
-            pass
-
+        self.tilemap.load('levels/level'+str(self.current_level)+'.json')
+        # try:
+        # except FileNotFoundError:
+        #     pass
 
     def init_player(self):
-        self.player = Player(self, [96,40], [16,16])
+        self.player = Player(self, self.tilemap.spawn_point, [16,16])
         self.movement = [False, False]
+
+    def init_save(self, save):
+        f = open('saves/'+str(save)+'.json', 'r')
+        data = json.load(f)
+        f.close()
+
+        self.current_level = data['current_level']
 
 
     def __init__(self):
         pygame.init()
 
         self.init_window()
+        self.init_save(1)
         self.init_joy()
         self.init_binds()
         self.init_assets()

@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.utils import getxy
+from scripts.utils import getxy, restart_level
 
 class PhysicsEntity:
     def __init__(self, game, e_type, pos, size):
@@ -53,7 +53,15 @@ class PhysicsEntity:
             for rect in tilemap.checkpoints_around(self.pos):
                 if entity_rect.colliderect(rect[0]):
                     self.checkpoint = [rect[1][0]*tilemap.tile_size, rect[1][1]*tilemap.tile_size]
+                    return 0
+                
+        
+        def next_level_collisions(self, tilemap):
+            entity_rect = self.rect()
 
+            for rect in tilemap.next_level_around(self.pos):
+                if entity_rect.colliderect(rect[0]):
+                    restart_level(self.game, next_level=True)
                     return 0
         
 
@@ -196,7 +204,7 @@ class PhysicsEntity:
                         self.hearts -= 1
                         return 0
 
-        return {'checkpoint': checkpoint_collisions, 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
+        return {'checkpoint': checkpoint_collisions, 'next_level': next_level_collisions , 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
 
 
     def movement_physics(self):
@@ -227,6 +235,7 @@ class PhysicsEntity:
             self.collide['gates'](self, tilemap)
             self.collide['collectibles'](self, tilemap)
             self.collide['checkpoint'](self, tilemap)
+            self.collide['next_level'](self, tilemap)
         self.collide['plataform_X'](self, tilemap, frame_movement)
         self.collide['physics_X'](self, tilemap, frame_movement)
         self.collide['spike_X'](self, tilemap, frame_movement)
@@ -237,6 +246,7 @@ class PhysicsEntity:
             self.collide['gates'](self, tilemap)
             self.collide['collectibles'](self, tilemap)
             self.collide['checkpoint'](self, tilemap)
+            self.collide['next_level'](self, tilemap)
         self.collide['plataform_Y'](self, tilemap, frame_movement)
         self.collide['physics_Y'](self, tilemap, frame_movement)
         self.collide['spike_Y'](self, tilemap, frame_movement)
@@ -301,8 +311,15 @@ class Player(PhysicsEntity):
         else:
             self.set_action('idle')
 
+    def hearts_control(self):
+        if self.hearts <= 0:
+            self.hearts = 3
+            restart_level(self.game, next_level=False)
+
     def update(self, tilemap, movement=(0, 0)):
         super().update(tilemap, movement)
+
+        self.hearts_control()
 
         self.jump_control()
 

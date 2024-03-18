@@ -6,7 +6,7 @@ class Editor:
     def init_window(self):
         self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 
-        # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
+        self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
         self.surface_size = (480,270)       
 
         self.screen = pygame.display.set_mode((self.screen_size))
@@ -53,8 +53,10 @@ class Editor:
         self.tilemap = Tilemap(self)
 
         try:
-            self.tilemap.load('map.json')
+            self.tilemap.load(self.map)
+            self.spawn_point = self.tilemap.spawn_point
         except FileNotFoundError:
+            self.spawn_point = [0,0]
             pass
 
         self.tile_list = list(self.assets)
@@ -62,8 +64,11 @@ class Editor:
         self.tile_variant = 0
 
 
+
     def __init__(self):
         pygame.init()
+
+        self.map = 'levels/level2.json'
 
         self.init_window()
         self.init_binds()
@@ -123,7 +128,7 @@ class Editor:
 
                     if self.control:
                         if event.key == pygame.K_s:
-                            self.tilemap.save('map.json')
+                            self.tilemap.save(self.map)
 
 
                 elif event.type == pygame.KEYUP:
@@ -173,6 +178,9 @@ class Editor:
         if self.ongrid:
             if self.clicking:
                 self.tilemap.tilemap[str(tile_pos[0]) + ';' + str(tile_pos[1])] = {'type': self.tile_list[self.tile_group], 'variant': self.tile_variant, 'pos': tile_pos}
+
+                if self.tile_list[self.tile_group] == 'spawn_point':
+                    self.spawn_point = [int(tile_pos[0]*self.tilemap.tile_size-self.tilemap.tile_size/2), int(tile_pos[1]*self.tilemap.tile_size-self.tilemap.tile_size/2)]
             
             if self.right_clicking:
                 tile_loc = str(tile_pos[0]) + ';' + str(tile_pos[1])

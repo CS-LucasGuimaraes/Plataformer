@@ -7,13 +7,14 @@ NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0, 0), (-1, 1)
 GATES = {'key_door'}
 PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'key_door'}
 PLATAFORM_TILES = {'cloud_plataform', 'scaffolding'}
-ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag'}
+ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag', 'blue_flag'}
 COLLECTIBLES = {'coin', 'diamond', 'key'}
 DEATH_TILES = {'dye_point'}
 SPIKES = {'spike'}
-EDITOR_ONLY = {'dye_point', 'enemy'}
+EDITOR_ONLY = {'dye_point', 'enemy', 'spawn_point'}
 POLES = {'mushroom'}
 CHECKPOINT = {'flag', 'flag_pole'}
+NEXT_LEVEL = {'blue_flag', 'blue_flag_pole'}
 
 
 class Tilemap:
@@ -53,7 +54,8 @@ class Tilemap:
                         else:
                             if tile['type'] == 'enemy':
                                 self.game.enemies.append((enemy(self.game, [tile['pos'][0]*self.tile_size, tile['pos'][1]*self.tile_size], [8,16], self.game.player)))
-                                del self.tilemap[loc]
+                            
+                            del self.tilemap[loc]
                     else:
                         surf.blit(self.game.assets[tile['type']][tile['variant']],
                                 (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size -offset[1]))
@@ -91,6 +93,14 @@ class Tilemap:
         rects = []
         for tile in self.tiles_around(pos):
             if tile['type'] in CHECKPOINT:
+                rects.append((pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size),tile['pos']))
+        return rects
+    
+
+    def next_level_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in NEXT_LEVEL:
                 rects.append((pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size),tile['pos']))
         return rects
     
@@ -150,7 +160,7 @@ class Tilemap:
 
     def save(self, path):
         f = open(path, 'w')
-        json.dump({'tilemap': self.tilemap, 'tile_size': self.tile_size, 'offgrid': self.offgrid_tiles}, f)
+        json.dump({'tilemap': self.tilemap, 'tile_size': self.tile_size, 'offgrid': self.offgrid_tiles, 'spawn_point': self.game.spawn_point}, f)
         f.close()
 
         print("saved successfully".upper())
@@ -163,3 +173,4 @@ class Tilemap:
         self.tilemap = data['tilemap']
         self.tile_size = data['tile_size']
         self.offgrid_tiles = data['offgrid']
+        self.spawn_point = data['spawn_point']

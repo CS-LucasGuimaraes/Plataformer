@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+
+## [0.0.8] - 2024-03-18 &ensp; \</~lgf>
+
+### Added
+
+- More Levels: Added a levels folder, wich stores each map of the game.
+- Save games: Now, the game has saves that store where the player was on it's last gameplay.
+- Next Level: Blue flag added to trasport the player to the next level.
+
+### Changed
+
+- SpawPoint tile: New ``editor only`` tile added that allows the editor to chose where the player should start the level.
+- Restart Level: Function created to properly organize everything in level restarting.
+
 ## [0.0.7] - 2024-03-14 &ensp; \</~lgf>
 
 ### Added
