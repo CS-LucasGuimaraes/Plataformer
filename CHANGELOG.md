@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.9] - 2024-03-18 &ensp; \</~lgf>
+
+### Added
+
+- Sound Effects: Added the possibility to play SFX when some action occurs.
+- Backhround sounds: Added a background music and background ambience sounds.
+
+### Changed
+
+- Diferent editor levels: Now the editor support editing different leves. It asks the user wich level he want to eddit on run.
+
 
 ## [0.0.8] - 2024-03-18 &ensp; \</~lgf>
 

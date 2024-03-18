@@ -55,7 +55,8 @@ class Tilemap:
                             if tile['type'] == 'enemy':
                                 self.game.enemies.append((enemy(self.game, [tile['pos'][0]*self.tile_size, tile['pos'][1]*self.tile_size], [8,16], self.game.player)))
                             
-                            del self.tilemap[loc]
+                            if tile['type'] not in DEATH_TILES:
+                                del self.tilemap[loc]
                     else:
                         surf.blit(self.game.assets[tile['type']][tile['variant']],
                                 (tile['pos'][0] * self.tile_size - offset[0], tile['pos'][1] * self.tile_size -offset[1]))

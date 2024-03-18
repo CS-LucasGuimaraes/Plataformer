@@ -3,6 +3,7 @@ import os
 import pygame
 
 BASE_IMG_PATH = 'data/images/'
+BASE_SFX_PATH = 'data/sfx/'
 
 def load_image(path):
     img = pygame.image.load(BASE_IMG_PATH + path).convert()
@@ -14,6 +15,12 @@ def load_images(path):
     for img in sorted(os.listdir(BASE_IMG_PATH + path)):
         images.append(load_image(path+'/'+img))
     return images
+
+def load_sound(path):
+    return pygame.mixer.Sound(BASE_SFX_PATH + path)
+
+def load_music(path):
+    return pygame.mixer.music.load(BASE_SFX_PATH + path)
 
 def getxy(rect):
     return (rect.x, rect.y)
@@ -43,6 +50,7 @@ class Animation():
 def restart_level(game, next_level=False):
     if next_level: 
         game.current_level += 1
+        pygame.mixer.Sound.play(game.sounds['next_level'])
     game.enemies = []
     game.tilemap.load('levels/level'+str(game.current_level)+'.json')
     game.player.pos = game.tilemap.spawn_point

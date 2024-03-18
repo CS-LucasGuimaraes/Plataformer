@@ -9,7 +9,7 @@ class Game:
     def init_window(self):
         self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
 
-        self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
+        # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
         self.surface_size = (480,270)       
 
         self.screen = pygame.display.set_mode((self.screen_size))
@@ -42,7 +42,7 @@ class Game:
 
 
     def init_assets(self):
-        from scripts.assets import assets
+        from scripts.assets import assets, sounds
         merge_dict = assets
 
         self.assets = {
@@ -57,6 +57,7 @@ class Game:
         for k in merge_dict:
             self.assets[k] = merge_dict[k]
         
+        self.sounds = sounds
 
         self.tilemap = Tilemap(self)
 
@@ -94,6 +95,9 @@ class Game:
 
         self.enemies = []
 
+        self.sounds['ambience'].set_volume(0.3)
+        self.sounds['ambience'].play(-1)
+        self.sounds['music'].play(-1)
 
     def camera_control(self):
         self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) //30
@@ -149,6 +153,7 @@ class Game:
         while True:    
             self.process_events()
             
+
             render_scroll = self.camera_control()
             
             self.tilemap.render(self.display, offset=render_scroll, mode='game')

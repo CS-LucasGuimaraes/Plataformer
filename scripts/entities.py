@@ -52,7 +52,9 @@ class PhysicsEntity:
 
             for rect in tilemap.checkpoints_around(self.pos):
                 if entity_rect.colliderect(rect[0]):
-                    self.checkpoint = [rect[1][0]*tilemap.tile_size, rect[1][1]*tilemap.tile_size]
+                    if self.checkpoint != [rect[1][0]*tilemap.tile_size, rect[1][1]*tilemap.tile_size]: 
+                        self.checkpoint = [rect[1][0]*tilemap.tile_size, rect[1][1]*tilemap.tile_size]
+                        self.game.sounds['checkpoint'].play()
                     return 0
                 
         
@@ -71,6 +73,7 @@ class PhysicsEntity:
             for rect in tilemap.collectibles_around(self.pos):
                 if entity_rect.colliderect(rect[0]):
                     self.collectibles[rect[1]] += 1
+                    self.game.sounds['collectible'].play()
                     del tilemap.tilemap[rect[2]]
 
                     return 0
@@ -83,6 +86,7 @@ class PhysicsEntity:
                 if entity_rect.colliderect(rect[0]):
                     if self.collectibles['key'] > 0:
                         self.collectibles['key']-=1
+                        self.game.sounds['open_crate'].play()
                         
                         del tilemap.tilemap[rect[2]]
 
@@ -160,6 +164,7 @@ class PhysicsEntity:
                     self.pos = self.checkpoint.copy()
                     self.flip = False
                     self.hearts -= 1
+                    self.game.sounds['damage'].play()
                     return 0
         
         def spike_tiles_collisions_X(self, tilemap, frame_movement):
@@ -180,6 +185,7 @@ class PhysicsEntity:
                     if entity_rect.colliderect(rect):
                         self.pos = self.checkpoint.copy()
                         self.flip = False
+                        self.game.sounds['damage'].play()
                         self.hearts -= 1
                         return 0
             
@@ -201,6 +207,7 @@ class PhysicsEntity:
                     if entity_rect.colliderect(rect):
                         self.pos = self.checkpoint.copy()
                         self.flip = False
+                        self.game.sounds['damage'].play()
                         self.hearts -= 1
                         return 0
 
@@ -319,6 +326,13 @@ class Player(PhysicsEntity):
     def update(self, tilemap, movement=(0, 0)):
         super().update(tilemap, movement)
 
+        if movement[0] == 0 or self.in_air:
+            self.game.sounds['walk'].stop()
+            self.paused = True
+        elif self.paused:
+            self.game.sounds['walk'].play(-1)
+            self.paused = False
+
         self.hearts_control()
 
         self.jump_control()
@@ -339,9 +353,11 @@ class Player(PhysicsEntity):
     def jump(self):
         if self.in_air and (self.collisions['left'] or self.collisions['right']):
             self.wall_jump()
+            self.game.sounds['jump'].play()
 
         elif (self.jumps > 0): 
             if (self.jumps != self.max_jumps) or (self.jumps == self.max_jumps and (self.air_time < 10)):
+                self.game.sounds['jump'].play()
                 self.velocity[1] = -3.1
                 self.jumps -= 1
                 self.in_air = True
@@ -356,6 +372,7 @@ class enemy(PhysicsEntity):
 
     def update(self, tilemap, player):
         if self.rect().colliderect(player):
+            self.game.sounds['damage'].play()
             self.player.hearts -= 1
             self.player.pos = self.player.checkpoint.copy()
             self.player.flip = False

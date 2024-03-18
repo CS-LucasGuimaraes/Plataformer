@@ -68,7 +68,9 @@ class Editor:
     def __init__(self):
         pygame.init()
 
-        self.map = 'levels/level2.json'
+        level = input("Wich level do you want to edit? ")
+
+        self.map = 'levels/level'+level+'.json'
 
         self.init_window()
         self.init_binds()
