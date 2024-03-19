@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.0.14] - 2024-03-19 &ensp; \</~mdon>
+
+### Added
+
+- New assets: Loaded new assets.
+
+
+## [0.0.13] - 2024-03-19 &ensp; \</~lgf>
+
+### Added
+
+- Multiplayer: Support to multiplayer with multiple controllers.
+- Joystick menu: Support to use the menus with a joystick.
+- Pause menu: Added a menu for pausing the game.
+- Game over menu: Added a menu for when the player dies.
+
+### Changed
+
+- Menu Hover: The menu hover color now is white, to make it more visible when playing with a joystick.
+- BUGFIX: The flag do only a sound if the checkpoint is changed. Otherwise, the sound is not placed.
+- Kill sound: Now, the enemies make a bone breaking sound on death.
+
 ## [0.0.12] - 2024-03-18 &ensp; \</~lgf>
 
 ### Added
