@@ -5,8 +5,8 @@ from game import Game
 from scripts.menu.character_selection import character_selection
 
 class save_override(character_selection):
-    def __init__(self, main_menu):
-        super().__init__(main_menu)
+    def __init__(self, main_menu, joysticks):
+        super().__init__(main_menu, joysticks)
 
     def json_dump(self, save):
         f = open('saves/'+str(save)+'.json', 'w')

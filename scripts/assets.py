@@ -49,4 +49,5 @@ sounds = {
     'ambience': load_sound('ambience.wav'),
     'music': load_sound('music.wav'),
     'checkpoint': load_sound('checkpoint.wav'),
+    'kill': load_sound('kill.wav')
 }

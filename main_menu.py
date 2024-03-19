@@ -14,21 +14,23 @@ class Menu:
         # self.screen_size[0]/=1.5;self.screen_size[1]/=1.5
         self.surface_size = (480,270)       
 
-        self.screen = pygame.display.set_mode((self.screen_size))
-        self.display = pygame.Surface(self.surface_size)
+        self.screen = pygame.display.set_mode((self.screen_size), flags=pygame.NOFRAME)
+        self.display = pygame.Surface(self.surface_size, flags=pygame.SRCALPHA)
         self.interface = pygame.Surface((1920,1080))
 
-        self.home_screen = home_screen(self)
-        self.character_selection = character_selection(self)
-        self.save_override = save_override(self)
+        self.home_screen = home_screen(self, self.joysticks)
+        self.character_selection = character_selection(self, self.joysticks)
+        self.save_override = save_override(self, self.joysticks)
 
         pygame.display.set_caption('Menu')
 
 
     def __init__(self):
         pygame.init()
-
+        
+        self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
         self.init_window()        
+
 
         self.menu_index = 0
 
@@ -42,6 +44,13 @@ class Menu:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 ...
+
+            elif event.type == pygame.JOYBUTTONDOWN:
+                if event.button == 0:
+                    for index in range(len(self.joysticks)):
+                        joystick = self.joysticks[index]
+                        if joystick.get_button(0):
+                            self.clicking = True
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:       # LEFT CLICK

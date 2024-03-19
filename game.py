@@ -4,6 +4,8 @@ from scripts.tilemap import *
 from scripts.utils import load_image, load_images, Animation, restart_level
 from scripts.entities import PhysicsEntity, Player, enemy
 from scripts.ui import UI
+from scripts.cooperative import cooperative
+from scripts.menu.pause import Pause
 
 class Game:
     def init_window(self, screen, display, screen_size, surface_size):
@@ -13,18 +15,18 @@ class Game:
         self.screen = screen
         self.display = display
 
-
         pygame.display.set_caption('pygame ip')
 
 
     def init_joy(self):
         pygame.joystick.init()
 
-        if pygame.joystick.get_count() == 0: 
-            self.joystick = 0 
+        if pygame.joystick.get_count() == 0:
+            self.joysticks = []
             self.joy = False
         else: 
-            self.joystick = pygame.joystick.Joystick(0)
+            self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+
             self.joy = True
 
 
@@ -44,11 +46,30 @@ class Game:
         from scripts.assets import assets, sounds
         merge_dict = assets
 
+        colors = ['blue', 'green', 'pink', 'yellow']
+
         self.assets = {
-            'player/idle': Animation(load_images('entities/' + player_color +'/idle'), img_dur=16),
-            'player/run': Animation(load_images('entities/' + player_color + '/run'), img_dur=6),
-            'player/jump': Animation(load_images('entities/' + player_color + '/jump'), img_dur=5),
-            'player/wall_jump': Animation(load_images('entities/' + player_color + '/wall_jump'), img_dur=5),
+            'player0/idle': Animation(load_images('entities/' + colors[(0+player_color-1)%4] +'/idle'), img_dur=16),
+            'player0/run': Animation(load_images('entities/' + colors[(0+player_color-1)%4] + '/run'), img_dur=6),
+            'player0/jump': Animation(load_images('entities/' + colors[(0+player_color-1)%4] + '/jump'), img_dur=5),
+            'player0/wall_jump': Animation(load_images('entities/' + colors[(0+player_color-1)%4] + '/wall_jump'), img_dur=5),
+
+            'player1/idle': Animation(load_images('entities/' + colors[(1+player_color-1)%4] +'/idle'), img_dur=16),
+            'player1/run': Animation(load_images('entities/' + colors[(1+player_color-1)%4] + '/run'), img_dur=6),
+            'player1/jump': Animation(load_images('entities/' + colors[(1+player_color-1)%4] + '/jump'), img_dur=5),
+            'player1/wall_jump': Animation(load_images('entities/' + colors[(1+player_color-1)%4] + '/wall_jump'), img_dur=5),
+
+            'player2/idle': Animation(load_images('entities/' + colors[(2+player_color-1)%4] +'/idle'), img_dur=16),
+            'player2/run': Animation(load_images('entities/' + colors[(2+player_color-1)%4] + '/run'), img_dur=6),
+            'player2/jump': Animation(load_images('entities/' + colors[(2+player_color-1)%4] + '/jump'), img_dur=5),
+            'player2/wall_jump': Animation(load_images('entities/' + colors[(2+player_color)%4] + '/wall_jump'), img_dur=5),
+
+            'player3/idle': Animation(load_images('entities/' + colors[(3+player_color-1)%4] +'/idle'), img_dur=16),
+            'player3/run': Animation(load_images('entities/' + colors[(3+player_color-1)%4] + '/run'), img_dur=6),
+            'player3/jump': Animation(load_images('entities/' + colors[(3+player_color-1)%4] + '/jump'), img_dur=5),
+            'player3/wall_jump': Animation(load_images('entities/' + colors[(3+player_color-1)%4] + '/wall_jump'), img_dur=5),
+            
+            
             'enemy/idle': Animation(load_images('entities/enemy/run'), img_dur=3),
             'enemy/run': Animation(load_images('entities/enemy/run'), img_dur=3),
         }
@@ -61,17 +82,15 @@ class Game:
         self.tilemap = Tilemap(self)
 
         self.tilemap.load('levels/level'+str(self.current_level)+'.json')
-        # try:
-        # except FileNotFoundError:
-        #     pass
 
     def init_player(self):
-        self.player = Player(self, self.tilemap.spawn_point.copy(), [16,16])
-        self.movement = [False, False]
-        self.player.hearts = self.data['current_hearts']
-        self.player.collectibles['coin'] = self.data['current_collectibles']['coin']
-        self.player.collectibles['diamond'] = self.data['current_collectibles']['diamond']
-        self.player.collectibles['key'] = self.data['current_collectibles']['key']
+        self.cooperative_status = cooperative(3, 0, 0, 0) 
+        self.players = [Player(self, self.tilemap.spawn_point.copy(), [16,16], x) for x in range(max(len(self.joysticks),1))]
+        self.movement = [[False, False],[False, False],[False, False],[False, False]]
+        self.cooperative_status.hearts = self.data['current_hearts']
+        self.cooperative_status.collectibles['coin'] = self.data['current_collectibles']['coin']
+        self.cooperative_status.collectibles['diamond'] = self.data['current_collectibles']['diamond']
+        self.cooperative_status.collectibles['key'] = self.data['current_collectibles']['key']
 
     def init_save(self, save):
         self.save = save
@@ -91,6 +110,8 @@ class Game:
         self.init_assets(player_color)
         self.init_player()
 
+        self.pause = Pause(self, self.joysticks)
+
         self.clock = pygame.time.Clock()
         self.scroll = [0,0]
 
@@ -104,19 +125,31 @@ class Game:
         self.pop_list = []
 
     def camera_control(self):
-        self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) //30
-        self.scroll[1] += (self.player.rect().centery - self.display.get_height() / 2 - self.scroll[1]) //30
+        player_averege_pos = [0,0]
+        for player in self.players:
+            player_averege_pos[0] += player.rect().centerx
+            player_averege_pos[1] += player.rect().centery
+
+        player_averege_pos[0] /= len(self.players)
+        player_averege_pos[1] /= len(self.players)
+
+        self.scroll[0] += (player_averege_pos[0] - self.display.get_width() / 2 - self.scroll[0]) //30
+        self.scroll[1] += (player_averege_pos[1] - self.display.get_height() / 2 - self.scroll[1]) //30
 
         return (int(self.scroll[0]), int(self.scroll[1]))
 
     def controller_movements(self):
         if self.joy:
-                self.movement[0] = False
-                self.movement[1] = False
-                if round(self.joystick.get_axis(0),0) == -1:
-                    self.movement[0] = True
-                if round(self.joystick.get_axis(0),0) == +1:
-                    self.movement[1] = True
+                
+                self.movement = [[False, False],[False, False],[False, False],[False, False]]
+
+                for index in range(len(self.joysticks)):
+                    joystick = self.joysticks[index]
+
+                    if round(joystick.get_axis(0),0) == -1:
+                        self.movement[index][0] = True
+                    if round(joystick.get_axis(0),0) == +1:
+                        self.movement[index][1] = True
 
     def process_events(self):
         if self.joy:
@@ -124,31 +157,42 @@ class Game:
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if not self.joy:
+                # if not self.joy:
                     if event.key in self.keybinds['left']:
-                        self.movement[0] = True
+                        self.movement[0][0] = True
                     elif event.key in self.keybinds['right']:
-                        self.movement[1] = True
+                        self.movement[0][1] = True
                     elif event.key in self.keybinds['jump']:
-                        self.player.jump()
+                        self.players[0].jump()
+                    elif event.key == pygame.K_ESCAPE:
+                        self.pause.pause(self.display)
+                        self.movement = [[False, False],[False, False],[False, False],[False, False]]
+                        
 
             elif event.type == pygame.KEYUP:
-                if not self.joy:
+                # if not self.joy:
                     if event.key in self.keybinds['left']:
-                        self.movement[0] = False
+                        self.movement[0][0] = False
                     elif event.key in self.keybinds['right']:
-                        self.movement[1] = False
+                        self.movement[0][1] = False
             
             elif event.type == pygame.JOYBUTTONDOWN:
                 if event.button in self.controller_binds['jump']:
-                    self.player.jump()
+                    for index in range(len(self.joysticks)):
+                        joystick = self.joysticks[index]
+                        if joystick.get_button(0):
+                            self.players[index].jump()
+                    
             
             elif event.type == pygame.JOYDEVICEADDED:
-                self.joystick = pygame.joystick.Joystick(0)
+                # self.joystick = pygame.joystick.Joystick(0)
+                self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+
                 self.joy = True
             
             elif event.type == pygame.JOYDEVICEREMOVED:
-                self.joy = False
+                # self.joy = False
+                ...
 
             elif event.type == pygame.QUIT:
                 pygame.quit()
@@ -158,14 +202,14 @@ class Game:
             self.process_events()
             
 
-            render_scroll = self.camera_control()
+            self.render_scroll = self.camera_control()
             
-            self.tilemap.render(self.display, offset=render_scroll, mode='game')
+            self.tilemap.render(self.display, offset=self.render_scroll, mode='game')
 
             for index in range(len(self.enemies)):
                 enemy = self.enemies[index]
-                enemy.update(self.tilemap, self.player, index, (self.movement[1]-self.movement[0],0))
-                enemy.render(self.display, offset=render_scroll)
+                enemy.update(self.tilemap, index, self.movement)
+                enemy.render(self.display, offset=self.render_scroll)
             
             self.pop_list.sort(reverse=True)
 
@@ -173,13 +217,16 @@ class Game:
                 self.enemies.pop(index)
             self.pop_list=[]
 
-            self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
-            self.player.render(self.display, offset=render_scroll)
-            
+            for index in range(len(self.players)):
+                player = self.players[index]
+                player.update(self.tilemap, (self.movement[index][1]-self.movement[index][0], 0))
+                player.render(self.display, offset=self.render_scroll)
+
             self.screen.blit(pygame.transform.scale(self.display, self.screen_size), (0,0))
 
             self.ui.update()
             self.ui.render(self.screen)
+
             
             pygame.display.update()
             self.clock.tick(60)
