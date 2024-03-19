@@ -38,7 +38,14 @@ class Game:
         }
 
         self.controller_binds = {
-            'jump': [0]
+            'A': 0,
+            'B': 1,
+            'X': 2,
+            'Y': 3,
+            'l_bumper': 4,
+            'r_bumper': 5,
+            'back': 6,
+            'start': 7,
         }
 
 
@@ -102,13 +109,16 @@ class Game:
         self.current_level = self.data['current_level']
 
 
-    def __init__(self, player_color, screen_size, surface_size, screen, display, save):
+    def __init__(self, player_color, screen_size, surface_size, screen, display, save, menu):
+        self.menu = menu
+        
         self.init_window(screen, display, screen_size, surface_size)
         self.init_save(save)
         self.init_joy()
         self.init_binds()
         self.init_assets(player_color)
         self.init_player()
+
 
         self.pause = Pause(self, self.joysticks)
 
@@ -119,9 +129,9 @@ class Game:
 
         self.enemies = []
 
-        self.sounds['ambience'].set_volume(0.3)
-        self.sounds['ambience'].play(-1)
-        self.sounds['music'].play(-1)
+        # self.sounds['ambience'].set_volume(0.3)
+        # self.sounds['ambience'].play(-1)
+        # self.sounds['music'].play(-1)
         self.pop_list = []
 
     def camera_control(self):
@@ -177,11 +187,18 @@ class Game:
                         self.movement[0][1] = False
             
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button in self.controller_binds['jump']:
+                if event.button == self.controller_binds['A']:
                     for index in range(len(self.joysticks)):
                         joystick = self.joysticks[index]
-                        if joystick.get_button(0):
+                        if joystick.get_button(self.controller_binds['A']):
                             self.players[index].jump()
+                elif event.button == self.controller_binds['start']:
+                    for index in range(len(self.joysticks)):
+                        joystick = self.joysticks[index]
+                        if joystick.get_button(self.controller_binds['start']):
+                            self.pause.pause(self.display)
+                            self.movement = [[False, False],[False, False],[False, False],[False, False]]
+                        
                     
             
             elif event.type == pygame.JOYDEVICEADDED:
@@ -201,6 +218,7 @@ class Game:
         while True:    
             self.process_events()
             
+            if not self.menu.run_bool: break
 
             self.render_scroll = self.camera_control()
             

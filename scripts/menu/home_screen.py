@@ -24,7 +24,7 @@ class home_screen:
                        ]
 
 
-        self.axis = [0,0]
+        self.axis = [[0,0] for _ in self.joysticks]
 
 
     def controller_movements(self):
@@ -32,49 +32,49 @@ class home_screen:
             joystick = self.joysticks[index]
 
             if round(joystick.get_axis(0),0) == -1:
-                if self.axis[0] > 0:
-                    self.axis[0] = 0
-                self.axis[0] -= 1
+                if self.axis[index][0] > 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] -= 1
 
             elif round(joystick.get_axis(0),0) == +1:
-                if self.axis[0] < 0:
-                    self.axis[0] = 0
-                self.axis[0] += 1
+                if self.axis[index][0] < 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] += 1
             
-            else: self.axis[0] = 0
+            else: self.axis[index][0] = 0
 
 
 
-            if abs(self.axis[0]) == 15:
-                self.axis[0] = 0
+            if abs(self.axis[index][0]) == 15:
+                self.axis[index][0] = 0
 
 
 
             if round(joystick.get_axis(1),0) == -1:
-                if self.axis[1] > 0:
-                    self.axis[1] = 0
-                self.axis[1] -= 1
+                if self.axis[index][1] > 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] -= 1
 
             elif round(joystick.get_axis(1),0) == +1:
-                if self.axis[1] < 0:
-                    self.axis[1] = 0
-                self.axis[1] += 1
+                if self.axis[index][1] < 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] += 1
             
-            else: self.axis[1] = 0
+            else: self.axis[index][1] = 0
 
 
 
-            if abs(self.axis[1]) == 15:
-                self.axis[1] = 0
+            if abs(self.axis[index][1]) == 15:
+                self.axis[index][1] = 0
             
-            if self.axis[1] == 1:
+            if self.axis[index][1] == 1:
                 self.joy_group = (self.joy_group+1) % len(self.joy_map) 
-            elif self.axis[1] == -1:
+            elif self.axis[index][1] == -1:
                 self.joy_group = (self.joy_group-1) % len(self.joy_map)
 
-            if self.axis[0] == 1:
+            if self.axis[index][0] == 1:
                 self.joy_button = (self.joy_button+1) % len(self.joy_map[self.joy_group]) 
-            elif self.axis[0] == -1:
+            elif self.axis[index][0] == -1:
                 self.joy_button = (self.joy_button-1) % len(self.joy_map[self.joy_group])
             
             

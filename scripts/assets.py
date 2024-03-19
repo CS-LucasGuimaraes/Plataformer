@@ -34,6 +34,8 @@ assets = {
     'key': (Animation(load_images('tiles/key'), img_dur=15)),
     'spike': load_images('tiles/spike'),
     'snowman': load_images('tiles/snowman'),
+    'mario_box_closed': load_images('tiles/mario_box_closed'),
+    'mario_box_opened': load_images('tiles/mario_box_opened'),
     'dye_point': load_images('tiles/dye_point'),
     'enemy': load_images('tiles/enemy'),
     'spawn_point': load_images('tiles/spawn_point'),

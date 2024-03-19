@@ -24,7 +24,7 @@ class character_selection:
         self.colors = [(255,255,255),(255,255,255),(255,255,255),(255,255,255)]
 
         self.joy_button = 0
-        self.joy_group = 0
+        self.joy_group = 1
 
         self.joy_map = [
                         ['BACK'],
@@ -32,7 +32,7 @@ class character_selection:
                        ]
 
 
-        self.axis = [0,0]
+        self.axis = [[0,0] for _ in self.joysticks]
 
 
     def controller_movements(self):
@@ -40,63 +40,63 @@ class character_selection:
             joystick = self.joysticks[index]
 
             if round(joystick.get_axis(0),0) == -1:
-                if self.axis[0] > 0:
-                    self.axis[0] = 0
-                self.axis[0] -= 1
+                if self.axis[index][0] > 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] -= 1
 
             elif round(joystick.get_axis(0),0) == +1:
-                if self.axis[0] < 0:
-                    self.axis[0] = 0
-                self.axis[0] += 1
+                if self.axis[index][0] < 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] += 1
             
-            else: self.axis[0] = 0
+            else: self.axis[index][0] = 0
 
 
 
-            if abs(self.axis[0]) == 15:
-                self.axis[0] = 0
+            if abs(self.axis[index][0]) == 15:
+                self.axis[index][0] = 0
 
 
 
             if round(joystick.get_axis(1),0) == -1:
-                if self.axis[1] > 0:
-                    self.axis[1] = 0
-                self.axis[1] -= 1
+                if self.axis[index][1] > 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] -= 1
 
             elif round(joystick.get_axis(1),0) == +1:
-                if self.axis[1] < 0:
-                    self.axis[1] = 0
-                self.axis[1] += 1
+                if self.axis[index][1] < 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] += 1
             
-            else: self.axis[1] = 0
+            else: self.axis[index][1] = 0
 
 
 
-            if abs(self.axis[1]) == 15:
-                self.axis[1] = 0
+            if abs(self.axis[index][1]) == 15:
+                self.axis[index][1] = 0
             
-            if self.axis[1] == 1:
+            if self.axis[index][1] == 1:
                 self.joy_group = (self.joy_group+1) % len(self.joy_map) 
-            elif self.axis[1] == -1:
+            elif self.axis[index][1] == -1:
                 self.joy_group = (self.joy_group-1) % len(self.joy_map)
 
-            if self.axis[0] == 1:
+            if self.axis[index][0] == 1:
                 self.joy_button = (self.joy_button+1) % len(self.joy_map[self.joy_group]) 
-            elif self.axis[0] == -1:
+            elif self.axis[index][0] == -1:
                 self.joy_button = (self.joy_button-1) % len(self.joy_map[self.joy_group])
 
     def render_panels(self, surf, m_pos, clicking):
         if self.p1.update(surf, m_pos, clicking):
-            Game(1, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 1).run()
+            Game(1, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 1, self.main_menu).run()
 
         if self.p2.update(surf, m_pos, clicking):
-            Game(2, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 2).run()
+            Game(2, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 2, self.main_menu).run()
         
         if self.p3.update(surf, m_pos, clicking):
-            Game(3, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 3).run()
+            Game(3, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 3, self.main_menu).run()
         
         if self.p4.update(surf, m_pos, clicking):
-            Game(4, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 4).run()
+            Game(4, self.main_menu.screen_size, self.main_menu.surface_size, self.main_menu.screen, self.main_menu.display, 4, self.main_menu).run()
 
 
     def render_portraits(self, surf):
