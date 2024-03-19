@@ -13,7 +13,6 @@ class Game:
         self.screen = screen
         self.display = display
 
-
         pygame.display.set_caption('pygame ip')
 
 
@@ -33,6 +32,7 @@ class Game:
             'right': [pygame.K_d, pygame.K_RIGHT],
             'left': [pygame.K_a, pygame.K_LEFT],
             'jump': [pygame.K_w, pygame.K_UP, pygame.K_SPACE],
+            'pause': [pygame.K_p]
         }
 
         self.controller_binds = {
@@ -103,6 +103,11 @@ class Game:
         self.sounds['music'].play(-1)
         self.pop_list = []
 
+        self.PLAYING = 0
+        self.PAUSED = 1
+
+        self.game = self.PLAYING
+
     def camera_control(self):
         self.scroll[0] += (self.player.rect().centerx - self.display.get_width() / 2 - self.scroll[0]) //30
         self.scroll[1] += (self.player.rect().centery - self.display.get_height() / 2 - self.scroll[1]) //30
@@ -125,22 +130,27 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if not self.joy:
-                    if event.key in self.keybinds['left']:
+                    if event.key in self.keybinds['left'] and self.game == self.PLAYING:
                         self.movement[0] = True
-                    elif event.key in self.keybinds['right']:
+                    elif event.key in self.keybinds['right'] and self.game == self.PLAYING:
                         self.movement[1] = True
-                    elif event.key in self.keybinds['jump']:
+                    elif event.key in self.keybinds['jump'] and self.game == self.PLAYING:
                         self.player.jump()
+                    elif event.key in self.keybinds['pause']:
+                        if self.game != self.PAUSED:
+                            self.game = self.PAUSED
+                        else:
+                            self.game = self.PLAYING
 
             elif event.type == pygame.KEYUP:
                 if not self.joy:
-                    if event.key in self.keybinds['left']:
+                    if event.key in self.keybinds['left']  and self.game == self.PLAYING:
                         self.movement[0] = False
-                    elif event.key in self.keybinds['right']:
+                    elif event.key in self.keybinds['right'] and self.game == self.PLAYING:
                         self.movement[1] = False
             
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button in self.controller_binds['jump']:
+                if event.button in self.controller_binds['jump'] and self.game == self.PLAYING:
                     self.player.jump()
             
             elif event.type == pygame.JOYDEVICEADDED:
@@ -156,7 +166,6 @@ class Game:
     def run(self):
         while True:    
             self.process_events()
-            
 
             render_scroll = self.camera_control()
             
@@ -176,6 +185,10 @@ class Game:
             self.player.update(self.tilemap, (self.movement[1]-self.movement[0], 0))
             self.player.render(self.display, offset=render_scroll)
             
+            if self.game == self.PAUSED:
+                pygame.display.flip()
+                continue
+
             self.screen.blit(pygame.transform.scale(self.display, self.screen_size), (0,0))
 
             self.ui.update()

@@ -1,4 +1,5 @@
 import pygame
+from game import run
 
 from scripts.utils import getxy, restart_level
 class PhysicsEntity:

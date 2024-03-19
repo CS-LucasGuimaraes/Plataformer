@@ -35,7 +35,6 @@ class Menu:
         self.clicking = False
         self.right_clicking = False
 
-
         self.clock = pygame.time.Clock()
 
     def process_events(self):
@@ -80,7 +79,6 @@ class Menu:
                 self.character_selection.render(self.interface, m_pos, self.clicking)           
             elif self.menu_index == 2:
                 self.save_override.render(self.interface, m_pos, self.clicking)           
-            
             
             self.clicking = False
             
