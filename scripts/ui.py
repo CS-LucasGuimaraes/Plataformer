@@ -7,7 +7,7 @@ class UI:
 
         self.game = Game
         
-        self.player = Game.player
+        self.attributes = Game.cooperative_status
         self.pos = (0,0)
         
         self.font = pygame.font.Font('data/fonts/Kenney Future.ttf',int(12*self.game.screen_size[0]//self.game.surface_size[0]))
@@ -28,17 +28,17 @@ class UI:
         self.keys = self.font.render('0', True, (255,255,255))
 
     def update(self):
-        self.coins = self.font.render(str(self.player.collectibles['coin']), False, (255,255,255))
-        self.diamonds = self.font.render(str(self.player.collectibles['diamond']), False, (255,255,255))
-        self.keys = self.font.render(str(self.player.collectibles['key']), False, (255,255,255))
+        self.coins = self.font.render(str(self.attributes.collectibles['coin']), False, (255,255,255))
+        self.diamonds = self.font.render(str(self.attributes.collectibles['diamond']), False, (255,255,255))
+        self.keys = self.font.render(str(self.attributes.collectibles['key']), False, (255,255,255))
 
 
 
     def render(self, surf):
         
-        k1 = 1 if self.player.hearts >= 1 else 0
-        k2 = 1 if self.player.hearts >= 2 else 0
-        k3 = 1 if self.player.hearts >= 3 else 0
+        k1 = 1 if self.attributes.hearts >= 1 else 0
+        k2 = 1 if self.attributes.hearts >= 2 else 0
+        k3 = 1 if self.attributes.hearts >= 3 else 0
 
         surf.blit(self.heart_img[k1], (self.offset*1+self.size*0.0, self.offset))
         surf.blit(self.heart_img[k2], (self.offset*2+self.size*0.7, self.offset))

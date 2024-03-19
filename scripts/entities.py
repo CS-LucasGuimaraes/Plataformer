@@ -2,11 +2,12 @@ import pygame
 
 from scripts.utils import getxy, restart_level
 class PhysicsEntity:
-    def __init__(self, game, e_type, pos, size):
+    def __init__(self, game, e_type, pos, size, idx=''):
         self.game = game
         self.type = e_type
         self.pos = pos
         self.size = size
+        self.idx = idx
 
         self.action = ''
         
@@ -30,7 +31,7 @@ class PhysicsEntity:
     def set_action(self, action):
         if action != self.action:
             self.action = action
-            self.animation = self.game.assets[self.type + '/' + self.action].copy()
+            self.animation = self.game.assets[self.type + str(self.idx) + '/' + self.action].copy()
 
 
     def rect(self):
@@ -71,7 +72,7 @@ class PhysicsEntity:
 
             for rect in tilemap.collectibles_around(self.pos):
                 if entity_rect.colliderect(rect[0]):
-                    self.collectibles[rect[1]] += 1
+                    self.game.cooperative_status.collectibles[rect[1]] += 1
                     self.game.sounds['collectible'].play()
                     del tilemap.tilemap[rect[2]]
 
@@ -83,8 +84,8 @@ class PhysicsEntity:
 
             for rect in tilemap.gates_around(self.pos):
                 if entity_rect.colliderect(rect[0]):
-                    if self.collectibles['key'] > 0:
-                        self.collectibles['key']-=1
+                    if self.game.cooperative_status.collectibles['key'] > 0:
+                        self.game.cooperative_status.collectibles['key']-=1
                         self.game.sounds['open_crate'].play()
                         
                         del tilemap.tilemap[rect[2]]
@@ -162,7 +163,7 @@ class PhysicsEntity:
                 if entity_rect.colliderect(rect):
                     self.pos = self.checkpoint.copy()
                     self.flip = False
-                    self.hearts -= 1
+                    self.game.cooperative_status.hearts -= 1
                     self.game.sounds['damage'].play()
                     return 0
         
@@ -185,7 +186,7 @@ class PhysicsEntity:
                         self.pos = self.checkpoint.copy()
                         self.flip = False
                         self.game.sounds['damage'].play()
-                        self.hearts -= 1
+                        self.game.cooperative_status.hearts -= 1
                         return 0
             
         def spike_tiles_collisions_Y(self, tilemap, frame_movement):
@@ -207,7 +208,7 @@ class PhysicsEntity:
                         self.pos = self.checkpoint.copy()
                         self.flip = False
                         self.game.sounds['damage'].play()
-                        self.hearts -= 1
+                        self.game.cooperative_status.hearts -= 1
                         return 0
 
         return {'checkpoint': checkpoint_collisions, 'next_level': next_level_collisions , 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
@@ -283,17 +284,17 @@ class PhysicsEntity:
 
 
 class Player(PhysicsEntity):
-    def __init__(self, game, pos, size):
-        super().__init__(game, 'player', pos, size)
+    def __init__(self, game, pos, size, idx):
+        super().__init__(game, 'player', pos, size, idx)
 
-        self.hearts = 3
+        # self.hearts = 3
         self.max_jumps = 2
         self.jumps = self.max_jumps
         self.air_time = 0
         self.in_air = False
         self.ANIMATION_OFFSET = [2,0]
         self.checkpoint = list(pos).copy()
-        self.collectibles = {'key': 0, 'coin': 0, 'diamond': 0}
+        # self.collectibles = {'key': 0, 'coin': 0, 'diamond': 0}
 
     def jump_control(self):
         self.air_time += 1
@@ -318,8 +319,8 @@ class Player(PhysicsEntity):
             self.set_action('idle')
 
     def hearts_control(self):
-        if self.hearts <= 0:
-            self.hearts = 3
+        if self.game.cooperative_status.hearts <= 0:
+            self.game.cooperative_status.hearts = 3
             restart_level(self.game, next_level=False)
 
     def update(self, tilemap, movement=(0, 0)):
@@ -365,34 +366,36 @@ class Player(PhysicsEntity):
             surf.blit(pygame.transform.flip(self.animation.img(), self.flip, False), (self.pos[0] - offset[0] - self.ANIMATION_OFFSET[0], self.pos[1] - offset[1] - self.ANIMATION_OFFSET[1]))
 
 class enemy(PhysicsEntity):
-    def __init__(self, game, pos, size, player):
-        self.player = player
+    def __init__(self, game, pos, size, players):
+        self.players = players
         super().__init__(game, 'enemy', pos, size)
 
-    def update(self, tilemap, player, index, player_movement):
-        if self.rect().colliderect(player.rect()):
-            frame_movement = (player_movement[0] + player.velocity[0], player_movement[1] + player.velocity[1])
+    def update(self, tilemap, index, player_movement):
+        for idx in range(len(self.players)):
+            player = self.players[idx]
+            if self.rect().colliderect(player.rect()):
+                frame_movement = (player_movement[idx][0] + player.velocity[0], player_movement[idx][1] + player.velocity[1])
 
 
-            if frame_movement[1] > 0 and (player.pos[1] <= self.pos[1]-self.size[1] + 2 or player.pos[1] <= self.pos[1]-self.size[1] - 2):
-                self.collisions['up'] = True
-            elif frame_movement[1] < 0:
-                self.collisions['down'] = True
-            
-            if frame_movement[0] < 0:
-                self.collisions['right'] = True
-            elif frame_movement[0] > 0:
-                self.collisions['left'] = True
+                if frame_movement[1] > 0 and (player.pos[1] <= self.pos[1]-self.size[1] + 2 or player.pos[1] <= self.pos[1]-self.size[1] - 2):
+                    self.collisions['up'] = True
+                elif frame_movement[1] < 0:
+                    self.collisions['down'] = True
+                
+                if frame_movement[0] < 0:
+                    self.collisions['right'] = True
+                elif frame_movement[0] > 0:
+                    self.collisions['left'] = True
 
-            if self.collisions['up']:
-                self.game.sounds['jump'].play()
-                player.velocity[1] = -2
-                self.game.pop_list.append(index)
-            elif self.collisions['left'] or self.collisions['right'] or self.collisions['down']:
-                self.game.sounds['damage'].play()
-                self.player.hearts -= 1
-                self.player.pos = self.player.checkpoint.copy()
-                self.player.flip = False
+                if self.collisions['up']:
+                    self.game.sounds['jump'].play()
+                    player.velocity[1] = -2
+                    self.game.pop_list.append(index)
+                elif self.collisions['left'] or self.collisions['right'] or self.collisions['down']:
+                    self.game.sounds['damage'].play()
+                    self.game.cooperative_status.hearts -= 1
+                    player.pos = player.checkpoint.copy()
+                    player.flip = False
                 
         if not self.flip:
             if self.collisions['right'] or not tilemap.check_fall_right(self.pos):

@@ -49,8 +49,8 @@ class Animation():
 def json_dump(game):
     f = open('saves/'+ str(game.save) +'.json', 'w')
     json.dump({'current_level': game.current_level,
-               'current_hearts': game.player.hearts,
-               'current_collectibles': game.player.collectibles,
+               'current_hearts': game.cooperative_status.hearts,
+               'current_collectibles': game.cooperative_status.collectibles,
                }, f)
     f.close()
 
@@ -63,5 +63,14 @@ def restart_level(game, next_level=False):
 
     game.enemies = []
     game.tilemap.load('levels/level'+str(game.current_level)+'.json')
-    game.player.checkpoint = game.tilemap.spawn_point.copy()
-    game.player.pos = game.player.checkpoint.copy()
+    for player in game.players:
+        player.checkpoint = game.tilemap.spawn_point.copy()
+        player.pos = player.checkpoint.copy()
+
+    f = open('saves/'+str(game.save)+'.json', 'r')
+    data = json.load(f)
+    f.close()
+
+    game.cooperative_status.collectibles['coin'] = data['current_collectibles']['coin']
+    game.cooperative_status.collectibles['diamond'] = data['current_collectibles']['diamond']
+    game.cooperative_status.collectibles['key'] = data['current_collectibles']['key']
