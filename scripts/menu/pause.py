@@ -115,6 +115,11 @@ class Pause:
                         joystick = self.joysticks[index]
                         if joystick.get_button(self.game.controller_binds['start']):
                             self.control_pause = False
+                elif event.button == self.game.controller_binds['B']:
+                    for index in range(len(self.joysticks)):
+                        joystick = self.joysticks[index]
+                        if joystick.get_button(self.game.controller_binds['B']):
+                            self.control_pause = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:       # LEFT CLICK

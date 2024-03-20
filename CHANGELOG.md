@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.0.16] - 2024-03-20 &ensp; \</~lgf>
+
+### Added
+
+- Collectible hearts: Now, there are collectible hearts tiles, that can be collected to increase the player lives.
+- Unpause on ``B``: Now, the "B" Key on the joystick unpause the game.
+
+### Changed
+
+- Level changes: Now, there are some hearts spreaded over the levels, so the player can collect it.
+- BUGFIX: Now, the menu open always on the correct selection when using a joystick.'
+
+
 ## [0.0.15] - 2024-03-20 &ensp; \</~lgf>
 
 ### Added

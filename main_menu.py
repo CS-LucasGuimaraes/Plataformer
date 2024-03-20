@@ -5,8 +5,6 @@ from scripts.utils import load_image
 
 import pygame
 
-from game import Game
-
 class Menu:
     def init_window(self):
         self.screen_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -48,17 +46,42 @@ class Menu:
 
         self.clock = pygame.time.Clock()
 
+        self.controller_binds = {
+            'A': 0,
+            'B': 1,
+            'X': 2,
+            'Y': 3,
+            'l_bumper': 4,
+            'r_bumper': 5,
+            'back': 6,
+            'start': 7,
+        }
+
+
     def process_events(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 ...
 
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == 0:
+                if event.button == self.controller_binds['A']:
                     for index in range(len(self.joysticks)):
                         joystick = self.joysticks[index]
-                        if joystick.get_button(0):
+                        if joystick.get_button(self.controller_binds['A']):
                             self.clicking = True
+                elif event.button == self.controller_binds['B']:
+                    for index in range(len(self.joysticks)):
+                        joystick = self.joysticks[index]
+                        if joystick.get_button(self.controller_binds['B']):
+                            self.menu_index = 0
+                            self.character_selection.joy_button = 0
+                            self.character_selection.joy_group = 1
+
+                            self.home_screen.joy_button = 0
+                            self.home_screen.joy_group = 0
+
+                            self.save_override.joy_button = 0
+                            self.save_override.joy_group = 1
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:       # LEFT CLICK

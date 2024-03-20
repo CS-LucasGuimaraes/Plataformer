@@ -96,9 +96,13 @@ class home_screen:
 
         if self.start_button.update(surf, m_pos, clicking):
             self.main_menu.menu_index = 2
+            self.joy_button = 0
+            self.joy_group = 0
 
         if self.load_button.update(surf, m_pos, clicking):
             self.main_menu.menu_index = 1
+            self.joy_button = 0
+            self.joy_group = 0
 
         if self.exit_button.update(surf, m_pos, clicking):
             pygame.quit()

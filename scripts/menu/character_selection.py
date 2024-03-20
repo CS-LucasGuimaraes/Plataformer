@@ -184,6 +184,8 @@ class character_selection:
 
         if self.back_button.update(surf, m_pos, clicking):
             self.main_menu.menu_index = 0
+            self.joy_button = 0
+            self.joy_group = 1
 
         self.render_panels(surf, m_pos, clicking)
         self.render_portraits(surf)

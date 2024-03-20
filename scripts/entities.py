@@ -81,6 +81,18 @@ class PhysicsEntity:
                     return 0
         
 
+        def hearts_collisions(self, tilemap):
+            entity_rect = self.rect()
+
+            for rect in tilemap.hearts_around(self.pos):
+                if entity_rect.colliderect(rect[0]):
+                    self.game.cooperative_status.hearts = min(self.game.cooperative_status.hearts+1, 3)
+                    self.game.sounds['collectible'].play()
+                    del tilemap.tilemap[rect[2]]
+
+                    return 0
+                
+
         def collectibles_collisions(self, tilemap):
             entity_rect = self.rect()
 
@@ -225,7 +237,7 @@ class PhysicsEntity:
                         self.game.cooperative_status.hearts -= 1
                         return 0
 
-        return {'checkpoint': checkpoint_collisions, 'next_level': next_level_collisions, 'mario_box': mario_tiles_collisions, 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
+        return {'checkpoint': checkpoint_collisions, 'next_level': next_level_collisions, 'mario_box': mario_tiles_collisions, 'hearts': hearts_collisions , 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
 
 
     def movement_physics(self):
@@ -254,6 +266,7 @@ class PhysicsEntity:
         self.pos[0] += frame_movement[0]
         if self.type == 'player':
             self.collide['gates'](self, tilemap)
+            self.collide['hearts'](self, tilemap)
             self.collide['collectibles'](self, tilemap)
             self.collide['checkpoint'](self, tilemap)
             self.collide['next_level'](self, tilemap)
@@ -266,6 +279,7 @@ class PhysicsEntity:
         self.pos[1] += frame_movement[1]
         if self.type == 'player':
             self.collide['gates'](self, tilemap)
+            self.collide['hearts'](self, tilemap)
             self.collide['collectibles'](self, tilemap)
             self.collide['checkpoint'](self, tilemap)
             self.collide['next_level'](self, tilemap)

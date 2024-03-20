@@ -7,7 +7,7 @@ NEIGHBOR_OFFSETS = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (0, 0), (-1, 1)
 GATES = {'key_door'}
 PHYSICS_TILES = {'grass', 'snow', 'stone', 'boxes', 'crates', 'door', 'fence', 'leaves', 'mushroom', 'path', 'pipe', 'tree', 'key_door','mario_box_closed','mario_box_opened'}
 PLATAFORM_TILES = {'cloud_plataform', 'scaffolding'}
-ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag', 'blue_flag'}
+ANIMATED_TILES = {'coin', 'diamond', 'water', 'water_surface', 'key', 'flag', 'blue_flag','heart'}
 COLLECTIBLES = {'coin', 'diamond', 'key'}
 DEATH_TILES = {'dye_point'}
 SPIKES = {'spike'}
@@ -16,6 +16,7 @@ POLES = {'mushroom'}
 CHECKPOINT = {'flag', 'flag_pole'}
 NEXT_LEVEL = {'blue_flag', 'blue_flag_pole'}
 MARIO_BOX = {'mario_box_closed'}
+HEARTS = {'heart'}
 
 
 class Tilemap:
@@ -89,6 +90,14 @@ class Tilemap:
             if check_loc in self.tilemap:
                 tiles.append(self.tilemap[check_loc])
         return tiles
+    
+
+    def hearts_around(self, pos):
+        rects = []
+        for tile in self.tiles_around(pos):
+            if tile['type'] in HEARTS:
+                rects.append((pygame.Rect(tile['pos'][0] * self.tile_size, tile['pos'][1] * self.tile_size, self.tile_size, self.tile_size),tile['type'], (str(tile['pos'][0])) + ';' + str(tile['pos'][1])))
+        return rects
     
 
     def mario_boxes_around(self, pos):
