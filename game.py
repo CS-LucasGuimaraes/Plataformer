@@ -44,8 +44,7 @@ class Game:
             'Y': 3,
             'l_bumper': 4,
             'r_bumper': 5,
-            'back': 6,
-            'start': 7,
+            'start': [6,7,9],
         }
 
 
@@ -192,10 +191,10 @@ class Game:
                         joystick = self.joysticks[index]
                         if joystick.get_button(self.controller_binds['A']):
                             self.players[index].jump()
-                elif event.button == self.controller_binds['start']:
+                elif event.button in self.controller_binds['start']:
                     for index in range(len(self.joysticks)):
                         joystick = self.joysticks[index]
-                        if joystick.get_button(self.controller_binds['start']):
+                        if joystick.get_button(self.controller_binds['start'][0]) or joystick.get_button(self.controller_binds['start'][1]):
                             self.pause.pause(self.display)
                             self.movement = [[False, False],[False, False],[False, False],[False, False]]
                         

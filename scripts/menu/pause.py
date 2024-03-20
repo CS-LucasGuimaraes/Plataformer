@@ -110,10 +110,10 @@ class Pause:
                         joystick = self.joysticks[index]
                         if joystick.get_button(self.game.controller_binds['A']):
                             self.clicking = True
-                elif event.button == self.game.controller_binds['start']:
+                elif event.button in self.game.controller_binds['start']:
                     for index in range(len(self.joysticks)):
                         joystick = self.joysticks[index]
-                        if joystick.get_button(self.game.controller_binds['start']):
+                        if joystick.get_button(self.game.controller_binds['start'][0]) or joystick.get_button(self.game.controller_binds['start'][1]):
                             self.control_pause = False
                 elif event.button == self.game.controller_binds['B']:
                     for index in range(len(self.joysticks)):

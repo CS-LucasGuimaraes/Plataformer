@@ -53,8 +53,7 @@ class Menu:
             'Y': 3,
             'l_bumper': 4,
             'r_bumper': 5,
-            'back': 6,
-            'start': 7,
+            'start': [6,7,9],
         }
 
 

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.0.17] - 2024-03-20 &ensp; \</~lgf>
+
+### Added
+
+- Playstation Joystick Support: Now, the Playstation 4 and 5 controllers works correctly.
+
+### Changed
+
+- Level 0 changes: Solved a problem in map where a player could jump over some obstacles and would not need to use it's key.
+
 ## [0.0.16] - 2024-03-20 &ensp; \</~lgf>
 
 ### Added
