@@ -109,6 +109,7 @@ class Menu:
 
         self.sounds['ambience'].stop()
         self.sounds['music'].stop()
+        self.sounds['walk'].stop()
 
 while True:
     Menu().run()    # Start the program execution

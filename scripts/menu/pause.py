@@ -175,6 +175,7 @@ class Pause:
         self.control_pause = True
         self.clicking = False
         self.joy_group = 0
+        self.game.sounds['walk'].stop()
         while self.control_pause:
             self.process_events()
 

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.0.15] - 2024-03-20 &ensp; \</~lgf>
+
+### Added
+
+- In-level texts: Added a folder to stores in-game pre-rendered texts as tiles.
+- Level ammount verification: Dynamic verification of the ammount of levels to propperly show the percentage of each save.
+- New levels!: Level 0 (mini tutorial) added and level 1 changed to fit in game dynamics.
+
+### Changed
+
+- BUGFIX: Walking sound is stopped when go to main menu or to pause.
+- BUGFIX: Mario box now produces a propper sound.
+- Level 0: Levels starts with index 0, this way, when a game is reseted, it shows 0% instead of a frame percentage.
+- Reseted saves: Now, every save starts as a 0% save.
+
 ## [0.0.14] - 2024-03-19 &ensp; \</~lgf>
 
 ### Added

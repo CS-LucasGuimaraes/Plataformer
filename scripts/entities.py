@@ -67,6 +67,7 @@ class PhysicsEntity:
             for rect in tilemap.mario_boxes_around(self.pos):
                 if entity_rect.colliderect(rect[0]):
                     if frame_movement[1] < 0:
+                        self.game.sounds['collectible'].play()
                         tilemap.tilemap[str(rect[1][0])+';'+str(rect[1][1])]['type'] = 'mario_box_opened'
                         tilemap.tilemap[str(rect[1][0])+';'+str(rect[1][1]-1)] = {"type": "coin", "variant": 0, "pos": [rect[1][0],rect[1][1]-1]}
                         

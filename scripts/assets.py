@@ -39,6 +39,7 @@ assets = {
     'dye_point': load_images('tiles/dye_point'),
     'enemy': load_images('tiles/enemy'),
     'spawn_point': load_images('tiles/spawn_point'),
+    'text': load_images('tiles/text')
 }
 
 sounds = {

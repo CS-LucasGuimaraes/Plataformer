@@ -1,7 +1,7 @@
 from scripts.utils import load_image
 from scripts.menu.utils import Button, Panel
 from game import Game
-import json
+import os, json
 
 import pygame
 
@@ -12,7 +12,7 @@ class character_selection:
         self.font = pygame.font.Font('data/fonts/Kenney Future.ttf', 36)
         self.font2 = pygame.font.Font('data/fonts/Kenney Future.ttf', 18)
 
-        self.LEVELS_COUNT = 3
+        self.LEVELS_COUNT = len(os.listdir('levels'))-1
 
         self.back_button = Button((100, 100), 'Back to menu')    
 

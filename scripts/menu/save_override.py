@@ -11,7 +11,7 @@ class save_override(character_selection):
     def json_dump(self, save):
         f = open('saves/'+str(save)+'.json', 'w')
         json.dump({
-                    "current_level": 1,
+                    "current_level": 0,
                     "current_hearts": 3,
                     "current_collectibles": 
                         {
