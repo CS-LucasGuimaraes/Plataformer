@@ -6,10 +6,15 @@ import pygame
 class Game_over:
     def __init__(self, game, joysticks):
         self.game = game
+        self.menu = game.menu
         self.joysticks = joysticks
+
+        self.clock = pygame.time.Clock()
 
         self.screen_size = game.screen_size
         self.screen = game.screen
+
+        self.back_button = Button((100, 100), 'Back to menu')
 
         self.restart_button = Button((960-190, 245+400), 'RESTART LEVEL')
         self.exit_button = Button((960-190, 390+400), 'EXIT')
@@ -20,12 +25,13 @@ class Game_over:
         self.joy_map = [
                         ['restart'],
                         ['exit'],
+                        ['Back to Menu']
                        ]
 
 
-        self.axis = [0,0]
+        self.axis = [[0,0] for _ in self.joysticks]
 
-        self.font = pygame.font.Font('data/fonts/Kenney Future.ttf', 36)
+        self.font = pygame.font.Font('data/fonts/Kenney Future.ttf', 72)
 
         self.control_pause = True
         self.clicking = False
@@ -39,49 +45,49 @@ class Game_over:
             joystick = self.joysticks[index]
 
             if round(joystick.get_axis(0),0) == -1:
-                if self.axis[0] > 0:
-                    self.axis[0] = 0
-                self.axis[0] -= 1
+                if self.axis[index][0] > 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] -= 1
 
             elif round(joystick.get_axis(0),0) == +1:
-                if self.axis[0] < 0:
-                    self.axis[0] = 0
-                self.axis[0] += 1
+                if self.axis[index][0] < 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] += 1
             
-            else: self.axis[0] = 0
+            else: self.axis[index][0] = 0
 
 
 
-            if abs(self.axis[0]) == 15:
-                self.axis[0] = 0
+            if abs(self.axis[index][0]) == 15:
+                self.axis[index][0] = 0
 
 
 
             if round(joystick.get_axis(1),0) == -1:
-                if self.axis[1] > 0:
-                    self.axis[1] = 0
-                self.axis[1] -= 1
+                if self.axis[index][1] > 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] -= 1
 
             elif round(joystick.get_axis(1),0) == +1:
-                if self.axis[1] < 0:
-                    self.axis[1] = 0
-                self.axis[1] += 1
+                if self.axis[index][1] < 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] += 1
             
-            else: self.axis[1] = 0
+            else: self.axis[index][1] = 0
 
 
 
-            if abs(self.axis[1]) == 15:
-                self.axis[1] = 0
+            if abs(self.axis[index][1]) == 15:
+                self.axis[index][1] = 0
             
-            if self.axis[1] == 1:
+            if self.axis[index][1] == 1:
                 self.joy_group = (self.joy_group+1) % len(self.joy_map) 
-            elif self.axis[1] == -1:
+            elif self.axis[index][1] == -1:
                 self.joy_group = (self.joy_group-1) % len(self.joy_map)
 
-            if self.axis[0] == 1:
+            if self.axis[index][0] == 1:
                 self.joy_button = (self.joy_button+1) % len(self.joy_map[self.joy_group]) 
-            elif self.axis[0] == -1:
+            elif self.axis[index][0] == -1:
                 self.joy_button = (self.joy_button-1) % len(self.joy_map[self.joy_group])
             
             
@@ -141,6 +147,9 @@ class Game_over:
             elif self.joy_group == 1:
                 m_pos = (960-190, 390+400)
             
+            elif self.joy_group == 2:
+                m_pos = (100, 100)
+            
 
         
         if self.restart_button.update(surf, m_pos, clicking):
@@ -150,6 +159,11 @@ class Game_over:
         if self.exit_button.update(surf, m_pos, clicking):
             pygame.quit()
         
+
+        if self.back_button.update(surf, m_pos, clicking):
+            self.menu.run_bool = False
+            self.control_pause = False
+
     def run(self, surf):
         surf.fill((0,0,0,125))
         self.game.screen.blit(pygame.transform.scale(surf, self.game.screen_size), (0,0))
@@ -163,3 +177,5 @@ class Game_over:
 
             self.screen.blit(pygame.transform.scale(self.interface, self.screen_size), (0,0))
             pygame.display.update()
+
+            self.clock.tick(60)

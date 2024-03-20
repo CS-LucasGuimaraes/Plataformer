@@ -6,10 +6,15 @@ import pygame
 class Pause:
     def __init__(self, game, joysticks):
         self.game = game
+        self.menu = game.menu
         self.joysticks = joysticks
+
+        self.clock = pygame.time.Clock()
 
         self.screen_size = game.screen_size
         self.screen = game.screen
+        
+        self.back_button = Button((100, 100), 'Back to menu')
 
         self.resume_button = Button((960-190, 100+400), 'RESUME')
         self.restart_button = Button((960-190, 245+400), 'RESTART LEVEL')
@@ -22,10 +27,11 @@ class Pause:
                         ['resume'],
                         ['restart'],
                         ['exit'],
+                        ['Back to Menu']
                        ]
 
 
-        self.axis = [0,0]
+        self.axis = [[0,0] for _ in self.joysticks]
 
         self.control_pause = True
         self.clicking = False
@@ -39,49 +45,49 @@ class Pause:
             joystick = self.joysticks[index]
 
             if round(joystick.get_axis(0),0) == -1:
-                if self.axis[0] > 0:
-                    self.axis[0] = 0
-                self.axis[0] -= 1
+                if self.axis[index][0] > 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] -= 1
 
             elif round(joystick.get_axis(0),0) == +1:
-                if self.axis[0] < 0:
-                    self.axis[0] = 0
-                self.axis[0] += 1
+                if self.axis[index][0] < 0:
+                    self.axis[index][0] = 0
+                self.axis[index][0] += 1
             
-            else: self.axis[0] = 0
+            else: self.axis[index][0] = 0
 
 
 
-            if abs(self.axis[0]) == 15:
-                self.axis[0] = 0
+            if abs(self.axis[index][0]) == 15:
+                self.axis[index][0] = 0
 
 
 
             if round(joystick.get_axis(1),0) == -1:
-                if self.axis[1] > 0:
-                    self.axis[1] = 0
-                self.axis[1] -= 1
+                if self.axis[index][1] > 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] -= 1
 
             elif round(joystick.get_axis(1),0) == +1:
-                if self.axis[1] < 0:
-                    self.axis[1] = 0
-                self.axis[1] += 1
+                if self.axis[index][1] < 0:
+                    self.axis[index][1] = 0
+                self.axis[index][1] += 1
             
-            else: self.axis[1] = 0
+            else: self.axis[index][1] = 0
 
 
 
-            if abs(self.axis[1]) == 15:
-                self.axis[1] = 0
+            if abs(self.axis[index][1]) == 15:
+                self.axis[index][1] = 0
             
-            if self.axis[1] == 1:
+            if self.axis[index][1] == 1:
                 self.joy_group = (self.joy_group+1) % len(self.joy_map) 
-            elif self.axis[1] == -1:
+            elif self.axis[index][1] == -1:
                 self.joy_group = (self.joy_group-1) % len(self.joy_map)
 
-            if self.axis[0] == 1:
+            if self.axis[index][0] == 1:
                 self.joy_button = (self.joy_button+1) % len(self.joy_map[self.joy_group]) 
-            elif self.axis[0] == -1:
+            elif self.axis[index][0] == -1:
                 self.joy_button = (self.joy_button-1) % len(self.joy_map[self.joy_group])
             
             
@@ -99,11 +105,16 @@ class Pause:
                     self.control_pause = False
 
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.button == 0:
+                if event.button == self.game.controller_binds['A']:
                     for index in range(len(self.joysticks)):
                         joystick = self.joysticks[index]
-                        if joystick.get_button(0):
+                        if joystick.get_button(self.game.controller_binds['A']):
                             self.clicking = True
+                elif event.button == self.game.controller_binds['start']:
+                    for index in range(len(self.joysticks)):
+                        joystick = self.joysticks[index]
+                        if joystick.get_button(self.game.controller_binds['start']):
+                            self.control_pause = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:       # LEFT CLICK
@@ -139,6 +150,9 @@ class Pause:
             
             elif self.joy_group == 2:
                 m_pos = (960-190, 390+400)
+            
+            elif self.joy_group == 3:
+                m_pos = (100, 100)
 
         if self.resume_button.update(surf, m_pos, clicking):
             self.control_pause = False
@@ -149,13 +163,19 @@ class Pause:
 
         if self.exit_button.update(surf, m_pos, clicking):
             pygame.quit()
-        
+
+        if self.back_button.update(surf, m_pos, clicking):
+            self.menu.run_bool = False
+            self.control_pause = False
+
     def pause(self, surf):
         surf.fill((0,0,0,125))
         self.game.screen.blit(pygame.transform.scale(surf, self.game.screen_size), (0,0))
         pygame.display.update()
         self.control_pause = True
         self.clicking = False
+        self.joy_group = 0
+        self.game.sounds['walk'].stop()
         while self.control_pause:
             self.process_events()
 
@@ -163,3 +183,5 @@ class Pause:
 
             self.screen.blit(pygame.transform.scale(self.interface, self.screen_size), (0,0))
             pygame.display.update()
+
+            self.clock.tick(60)

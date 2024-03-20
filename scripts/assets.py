@@ -49,9 +49,12 @@ assets = {
     'stairs_industrial': load_images('tiles/stairs_industrial'),
     'triangles': load_images('tiles/triangles'),
     'wheels': load_images('tiles/wheels'),
+    'mario_box_closed': load_images('tiles/mario_box_closed'),
+    'mario_box_opened': load_images('tiles/mario_box_opened'),
     'dye_point': load_images('tiles/dye_point'),
     'enemy': load_images('tiles/enemy'),
     'spawn_point': load_images('tiles/spawn_point'),
+    'text': load_images('tiles/text')
 }
 
 sounds = {

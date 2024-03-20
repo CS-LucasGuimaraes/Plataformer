@@ -1,6 +1,6 @@
-# The Ultimate Plataformer
+# The Ultimate Platformer
 
-Welcome to the repository for The Ultimate Plataformer Game! This is game developed during the Programming Introduction 
+Welcome to the repository for The Ultimate Platformer Game! This is game developed during the Programming Introduction 
 Subject in Informatics Center.
 
 This repository houses the code submissions for each stage of the game, showcasing the problem-solving skills and progress
@@ -8,7 +8,7 @@ throughout the project development.
 
 ## 📖 Table of Contents
 
-* [❓ Key Information](#❓-key-information)
+* [❓ Key Information](#❓-key-information
 * [️🏗️ Repository Structure](#🏗️-repository-structure)
 * [📖 Used Libs](#📖-used-libs)
 * [🏃 Run Instructions](#🏃-run-instructions)
@@ -24,7 +24,7 @@ throughout the project development.
     * José Ivan Xisto Vilela Junior </jixvj> ([]())
 
  * University Period: 1st Period
- * License: GPL 3.0 ([LICENSE.md](https://github.com/CS-LucasGuimaraes/Plataformer/blob/main/LICENSE))
+ * License: GPL 3.0 ([LICENSE.md](https://github.com/CS-LucasGuimaraes/Platformer/blob/main/LICENSE))
 
 
 ## 🏗️ Repository Structure
@@ -43,7 +43,7 @@ throughout the project development.
  ``` 
  2) Clone the repository:
  ```git
-    git clone https://github.com/CS-LucasGuimaraes/plataformer.git
+    git clone https://github.com/CS-LucasGuimaraes/Platformer.git
  ``` 
  3) Run the file ``main_menu.py``
 

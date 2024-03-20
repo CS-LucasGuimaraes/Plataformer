@@ -22,6 +22,9 @@ class Menu:
         self.character_selection = character_selection(self, self.joysticks)
         self.save_override = save_override(self, self.joysticks)
 
+        self.run_bool = True
+
+
         pygame.display.set_caption('Menu')
 
 
@@ -37,6 +40,11 @@ class Menu:
         self.clicking = False
         self.right_clicking = False
 
+        from scripts.assets import sounds
+        self.sounds = sounds
+        self.sounds['ambience'].set_volume(0.3)
+        self.sounds['ambience'].play(-1)
+        self.sounds['music'].play(-1)
 
         self.clock = pygame.time.Clock()
 
@@ -78,7 +86,7 @@ class Menu:
 
 
     def run(self):
-        while True:
+        while self.run_bool:
             self.process_events()
 
             m_pos = self.get_mpos()
@@ -99,4 +107,9 @@ class Menu:
             pygame.display.update()
             self.clock.tick(60)
 
-Menu().run()    # Start the program execution
+        self.sounds['ambience'].stop()
+        self.sounds['music'].stop()
+        self.sounds['walk'].stop()
+
+while True:
+    Menu().run()    # Start the program execution

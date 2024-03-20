@@ -7,11 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## [0.0.14] - 2024-03-19 &ensp; \</~mdon>
+## [0.0.15] - 2024-03-20 &ensp; \</~lgf>
 
 ### Added
 
+- In-level texts: Added a folder to stores in-game pre-rendered texts as tiles.
+- Level ammount verification: Dynamic verification of the ammount of levels to propperly show the percentage of each save.
+- New levels!: Level 0 (mini tutorial) added and level 1 changed to fit in game dynamics.
+
+### Changed
+
+- BUGFIX: Walking sound is stopped when go to main menu or to pause.
+- BUGFIX: ``Mario box`` now produces a propper sound.
+- Level 0: Levels starts with index 0, this way, when a game is reseted, it shows 0% instead of a frame percentage.
+- Reseted saves: Now, every save starts as a 0% save.
+- Typo: Fixed a typo in the repository name and on ``README.md``. ``plataformer``->``platformer``.
+
+## [0.0.14] - 2024-03-19 &ensp; \</~lgf> \, \</~mdon>
+
+### Added
+
+- Controller Binds: Now the ``controler_binds`` dict has an attribute for each joystick button.
+- Back to menu: All the menus (included pause and kill) has an button to go back to the main menu.
+- Mario Boxes: New type of tiles that drop a coin on top when hitted from bottom. After the hit, it changes from a ``closed mario box`` to an ``open mario box``.
 - New assets: Loaded new assets.
+
+### Changed
+
+- BUGFIX: Start button on joystick now pause the game.
+- BUGFIX: Now the Character Selection open in the correct place for the joystick mode.
+- BUGFIX: Now, the controller moves at the same speed at pause screen and game over screen.
+- BUGFIX: The axis are controlled for each controller separately.
+- Player1 Color: The color of the first player is purple now (previously blue) due to visibility and contrast problems.
+
 
 
 ## [0.0.13] - 2024-03-19 &ensp; \</~lgf>
@@ -28,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Menu Hover: The menu hover color now is white, to make it more visible when playing with a joystick.
 - BUGFIX: The flag do only a sound if the checkpoint is changed. Otherwise, the sound is not placed.
 - Kill sound: Now, the enemies make a bone breaking sound on death.
+
 
 ## [0.0.12] - 2024-03-18 &ensp; \</~lgf>
 

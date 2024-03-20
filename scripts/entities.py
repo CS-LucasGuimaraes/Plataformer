@@ -60,7 +60,17 @@ class PhysicsEntity:
                         self.checkpoint = [rect[1][0]*tilemap.tile_size, rect[1][1]*tilemap.tile_size]
                         self.game.sounds['checkpoint'].play()
                     return 0
-                
+        
+
+        def mario_tiles_collisions(self, tilemap, frame_movement):
+            entity_rect = self.rect()
+            for rect in tilemap.mario_boxes_around(self.pos):
+                if entity_rect.colliderect(rect[0]):
+                    if frame_movement[1] < 0:
+                        self.game.sounds['collectible'].play()
+                        tilemap.tilemap[str(rect[1][0])+';'+str(rect[1][1])]['type'] = 'mario_box_opened'
+                        tilemap.tilemap[str(rect[1][0])+';'+str(rect[1][1]-1)] = {"type": "coin", "variant": 0, "pos": [rect[1][0],rect[1][1]-1]}
+                        
         
         def next_level_collisions(self, tilemap):
             entity_rect = self.rect()
@@ -215,7 +225,7 @@ class PhysicsEntity:
                         self.game.cooperative_status.hearts -= 1
                         return 0
 
-        return {'checkpoint': checkpoint_collisions, 'next_level': next_level_collisions , 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
+        return {'checkpoint': checkpoint_collisions, 'next_level': next_level_collisions, 'mario_box': mario_tiles_collisions, 'collectibles': collectibles_collisions, 'gates': gates_collisions, 'physics_X': physics_tiles_collisions_X, 'physics_Y': physics_tiles_collisions_Y, 'plataform_X': plataform_tiles_collisions_X, 'plataform_Y': plataform_tiles_collisions_Y, 'death': death_tiles_collisions, 'spike_X': spike_tiles_collisions_X, 'spike_Y': spike_tiles_collisions_Y}
 
 
     def movement_physics(self):
@@ -247,6 +257,7 @@ class PhysicsEntity:
             self.collide['collectibles'](self, tilemap)
             self.collide['checkpoint'](self, tilemap)
             self.collide['next_level'](self, tilemap)
+            self.collide['mario_box'](self, tilemap, frame_movement)
         self.collide['plataform_X'](self, tilemap, frame_movement)
         self.collide['physics_X'](self, tilemap, frame_movement)
         self.collide['spike_X'](self, tilemap, frame_movement)
@@ -258,6 +269,7 @@ class PhysicsEntity:
             self.collide['collectibles'](self, tilemap)
             self.collide['checkpoint'](self, tilemap)
             self.collide['next_level'](self, tilemap)
+            self.collide['mario_box'](self, tilemap, frame_movement)
         self.collide['plataform_Y'](self, tilemap, frame_movement)
         self.collide['physics_Y'](self, tilemap, frame_movement)
         self.collide['spike_Y'](self, tilemap, frame_movement)
