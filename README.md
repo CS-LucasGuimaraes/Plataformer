@@ -46,11 +46,14 @@ Embarque nesta aventura cheia de suspense, onde cada decisão pode ser crucial. 
 **Controles**:
   |            Teclas              |          Descrição           |
   | ------------------------------ | -------------------------- |
-  | **W-A-S-D;  &#8592; , &#8593; , &#8594; , &#8595;** | Movimento |
-  | **Y-X-A-B** | Movimento Xbox|
-  | **△-▢-X-〇** | Movimento PS4|
-  | **Tecla de Espaço** | Pula |
-  | **P** | Pause |
+  | **W-A-S-D;  &#8592; , &#8593; , &#8594; , &#8595;** | Movimento PC |
+  | **Analógico Esquerdo** | Movimento Xbox/PS4 |
+  | **Tecla de Espaço** | Pulo PC |
+  | **A** | Pulo Xbox |
+  | **X** | Pulo PS4 |
+  | **ESC** | Pause PC |
+  | **Start** | Pause Xbox |
+  | **Options** | Pause PS4 |
 
 ## 📖 Bibliotecas usadas
 
