@@ -11,7 +11,7 @@ Embarque nesta aventura cheia de suspense, onde cada decisão pode ser crucial. 
    * Lucas Guimarães Fernandes </lgf> ([CS-LucasGuimaraes](https://github.com/CS-LucasGuimaraes))
    * Marcos Didier Oliveira Neto </mdon> ([marcosdidier](https://github.com/marcosdidier)) 
    * Fernanda Marques Neves </fmn> ([fiefaneves](https://github.com/fiefaneves))
-   * Rafael Domingos Nobrega </rdn> ([]())
+   * Rafael Domingos Nobrega </rdn> ([rafaelnobrega](https://github.com/rafadnobrega))
    * José Ivan Xisto Vilela Junior </jixvj> ([joseivann](https://github.com/joseivann))
 
 * Universidade Federal de Pernambuco: 1º Período
