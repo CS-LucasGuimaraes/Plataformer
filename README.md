@@ -14,8 +14,8 @@ Embarque nesta aventura cheia de suspense, onde cada decisão pode ser crucial. 
    * Rafael Domingos Nobrega </rdn> ([rafaelnobrega](https://github.com/rafadnobrega))
    * José Ivan Xisto Vilela Junior </jixvj> ([joseivann](https://github.com/joseivann))
 
-* Universidade Federal de Pernambuco: 1º Período
-* License: GPL 3.0 ([LICENSE.md](https://github.com/CS-LucasGuimaraes/Platformer/blob/main/LICENSE))
+> Universidade Federal de Pernambuco: 1º Período
+> License: GPL 3.0 ([LICENSE.md](https://github.com/CS-LucasGuimaraes/Platformer/blob/main/LICENSE))
 
 ## 🎯 Índice
 
