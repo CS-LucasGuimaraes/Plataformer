@@ -22,7 +22,6 @@ class Menu:
 
         self.run_bool = True
 
-
         pygame.display.set_caption('Menu')
 
 
