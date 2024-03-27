@@ -24,6 +24,7 @@ Embarque nesta aventura cheia de suspense, onde cada decisão pode ser crucial. 
 - [👨🏻‍💻 Organização do código](#-Organização-do-código)
 - [📝 Conceitos](#-Conceitos)
 - [🧠 Desafios/Experiência](#-Desafios/Experiência)
+- [📸 Galeria de Imagens](#-Galeria-de-imagens)
 
 ## 🎮 Como Baixar e Jogar
   1) Instalar pyGame: abrir o terminal e escrever:  
@@ -84,6 +85,9 @@ Abriga as linhas responsáveis pela renderização de nível, coletáveis e inim
 - **editor.py**:
 Contém o modo editor, em que é possível adicionar, excluir e editar tiles nas diferentes fases. Essa função foi de grande relevância ao nosso tradibalho pois possibilita trazer mais nâmica e facilidade para a criação de novos níveis que explorem a criatividade e o tamanho do desafio que se deseja propor.
 
+![img4](https://github.com/joseivann/Relatorio/assets/84510651/d85b3525-450b-46d6-ad2e-3e1897aaeaa0)
+![Gravação de Tela 2024-03-21 às 00 37 00](https://github.com/joseivann/Relatorio/assets/84510651/0a4f09ea-bf64-4e82-a62e-da3c0c40e662) |
+
 #### **Em seguida, temos os arquivos que dão suporte aos principais (/scripts)**:
 - **utils.py**:
 Desenvolvimento das funções de carregamento de imagens, sons, classe de animações, manipulação dos arquivos em .json e restart level.
@@ -128,45 +132,40 @@ Encontramos os arquivos .json, nos quais armazenamos os dados de saves de jogos 
 Armazenamento de fontes, imagens e sons solicitados durente o código do jogo. 
 
 ## 📝 Conceitos
+Os conceitos de python que aprendemos durante a disciplina de Introdução à Programação e foram usados no desenvolvimento do código foram:
+
+#### **Classes e Funções:**
+Usadas em diversas partes do programa, do menu do jogo até os scripts de funcionalidade, estruturando o programa e organizando em unidades lógicas, melhorando a legibilidade e a manutenibilidade.
+
+#### **Dicionários/Sets**:
+Utilizados para armazenar itens do jogo que adiquirem determinado comportamento, assim como para armazenar a imagem e som que cada objeto se relaciona na renderizazção do jogo.
+
+#### **Listas**:
+Utilizadas várias vezes durante o desenvolvimento do projeto. Como em dimensões da tela do jogo, posição do mouse e de outros objetos na tela, assim como quais teclas determinam a movimentação do player.
 
 #### **Estruturas Condicionais**:
- 
- -
- -
- -
- -
- -
- 
+Durante a formulação do código foi utilizado por diversas vezes o if, elif e else. Possibilitando por exemplo, determinar o que acontece caso o usuário aperte enter, fazendo com que o player pule.
+
 ####  **Laços**:
-
-Dentro do jogo, é possível empregar essas estruturas no código através dos comandos For e While. Eles possibilitam a repetição de instruções até que uma condição seja alcançada. 
-
--
--
--
--
-
-#### **Loops**:
-
--
--
--
--
--
- 
+Dentro do jogo, é possível empregar essas estruturas no código através dos comandos For e While. Eles possibilitam a repetição de instruções até que uma condição seja alcançada. Os loops foram usados em diversos momentos dentro do código, como na detecção de colisão do jogador. Além de checar a colisão de cada item com o jogador e salvar os itens coletados nos dicionários correspondentes, etc.
 
 ## 🧠 Desafios/Experiência
 
  **Maiores desafios**:
-
 Os maiores desafios enfrentados pela nossa equipe foram o uso de ferramentas como Pygame, Github, Programação Orientada a Objetos, dado que a maioria dos membros tinha pouca ou nenhuma experiência anterior com essas ferramentas.
-
 Além disso, a utilização dessas ferramentas era indispensável, o que nos levou a aprender o básico rapidamente para iniciar o desenvolvimento do projeto, e acabou nos proporcionando uma aprendizagem diversificada, desde a criação de elementos simples, como um quadrado móvel na tela, até a elaboração de um jogo mais complexo, que era o objetivo do nosso projeto.
 
  **Maiores erros cometidos**:
-
 Acreditamos que um dos nossos erros significativos foi a coordenação do trabalho em equipe, quem vai fazer o que, como cada pessoa vai fazer a sua parte, a integração das partes desenvolvidas e a resolução de alguns bugs durante o processo.
 
  **Lições aprendidas**:
-
 Durante o projeto, aprendemos duas lições fundamentais. Primeiramente, compreendemos a importância do planejamento e da organização da equipe. Além disso, outro aspecto significativo que aprendemos foi a importância em reconhecer que sempre há algo a aprender e que a ajuda de outras pessoas pode ser fundamental para o progresso do projeto.
+
+## 📸 Galeria de Imagens
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|![Screenshot (1)](https://github.com/joseivann/Relatorio/assets/84510651/1b8eca5e-f82a-41e6-b71c-56330fd32925) | ![Screenshot (2)](https://github.com/joseivann/Relatorio/assets/84510651/ccd4f4b5-707f-4f7d-92e8-641a29ff6800) | ![Screenshot (5)](https://github.com/joseivann/Relatorio/assets/84510651/fecf1953-76d8-44d7-a9ae-e3488644073d) |
+
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|![Screenshot (7)](https://github.com/joseivann/Relatorio/assets/84510651/d591fe5e-c80d-49c5-a335-885605a4935b) | ![Screenshot (4)](https://github.com/joseivann/Relatorio/assets/84510651/b945ef18-7fe9-433e-a8f4-349aa302cc65) | ![Screenshot (6)](https://github.com/joseivann/Relatorio/assets/84510651/de852e59-8147-4b27-abb0-bde9ed32c31e) |
