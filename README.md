@@ -17,7 +17,7 @@ Embarque nesta aventura cheia de suspense, onde cada decisão pode ser crucial. 
 
 ## 🎯 Índice
 
-- [👥 Informações-chave](#-Membros-da-equipe)
+- [👥 Membros da equipe](#-Membros-da-equipe)
 - [🎮 Instruções de execução](#-Como-Baixar-e-Jogar)
 - [📖 Bibliotecas usadas](#-Bibliotecas-usadas)
 - [📋 Divisão de tarefas](#-Divisão-de-tarefas)
@@ -38,8 +38,7 @@ Embarque nesta aventura cheia de suspense, onde cada decisão pode ser crucial. 
 
 <br>
 
-Desenvolvido com plataformas de diferentes Alturas, Obstáculos e Inimigos o seu objetivo principal é mover o personagem do jogador da base até a bandeira que indicará o próximo nível;
-Sua vida e a quantidade de itens coletados apareceram no canto superior da tela.
+Desenvolvido com plataformas de diferentes alturas, obstáculos e inimigos, o objetivo principal é mover o personagem do jogador da base até a bandeira que indicará o próximo nível. Sua vida e a quantidade de itens coletados apareceram no canto superior da tela.
 
 #### **Link para o codigo fonte**: https://github.com/CS-LucasGuimaraes/Platformer.git
 
@@ -61,7 +60,7 @@ Sua vida e a quantidade de itens coletados apareceram no canto superior da tela.
 Essa biblioteca consiste em um conjunto de módulos criados com o propósito de facilitar a criação de jogos, possibilitando o desenvolvimento de jogos e aplicativos multimídia utilizando a linguagem Python.
 
 #### **JSON**:
-O JSON (JavaScript Object Notation) é uma ferramenta essencial na criação de jogos simples em 2D com Python, permitindo o armazenamento e troca eficiente de dados.
+O JSON (JavaScript Object Notation) é uma ferramenta essencial, permitindo o armazenamento e troca eficiente de dados. Com ele, foi possível o armazenamento de dados, como a posição de cada objeto dos níveis, sem que comprometesse a leitura e entendimento do código.
 
 ## 📋 Divisão de tarefas
 
@@ -75,10 +74,58 @@ O JSON (JavaScript Object Notation) é uma ferramenta essencial na criação de 
 
 ## 👨🏻‍💻 Organização do código
 
--
--
--
--
+#### **A organização do código é composta por diversas partes, sendo as principais**:
+- **main_menu.py**:
+É responsável por conter a renderização do menu completo, incluindo logo do jogo e 3 botões que direcionam para o New game, Load game e Exit.
+
+-  **game.py**: 
+Abriga as linhas responsáveis pela renderização de nível, coletáveis e inimigos. Também contendo as funções de controle de câmera e dos processamentos de eventos.
+
+- **editor.py**:
+Contém o modo editor, em que é possível adicionar, excluir e editar tiles nas diferentes fases. Essa função foi de grande relevância ao nosso tradibalho pois possibilita trazer mais nâmica e facilidade para a criação de novos níveis que explorem a criatividade e o tamanho do desafio que se deseja propor.
+
+#### **Em seguida, temos os arquivos que dão suporte aos principais (/scripts)**:
+- **utils.py**:
+Desenvolvimento das funções de carregamento de imagens, sons, classe de animações, manipulação dos arquivos em .json e restart level.
+
+- **assets.py**:
+Armazenamento em dicionários das imagens de cada objeto carregada, além dos sons de cada ação executada pelos players.
+
+- **entities.py**:
+No qual se desenvolve a classe de física dos objetos, estruturando colisões, itens coletáveis, além de colisões com inimigos e obstáculos. Temos ainda, a classe do player, a qual herda a classe anterior e adiciona algumas funções, como a de pulo do jogador, contagem de vida. E por fim, a classe do inimigo, que também herda a classe física.
+
+- **tilemap.py**:
+Nesse arquivo, encontramos a divisão dos tiles em sets, o qual melhora a performace do jogo, visto que diminui o tempo de iteração, além de ser de fácil manipulação visto que cada set admite um comportamento ordenado por função. Logo, se futuramente for necessário a adição de algum outro objeto, basta que seja incluído no set correspondente. 
+
+- **ui.py**:
+Aqui temos a classe responsável pela contagem de coletáveis, como quantidade de moedas, chaves e diamantes.
+
+#### **Ainda dentro de scripts temos uma pasta específica para arquivos de suporte para o menu (/scripts/menu)**:
+- **utils.py**:
+Desempenha o mesmo papel que o arquivo utils citado anteriormente, só que com exclusividade para o menu.
+
+- **home_screen.py**:
+Nele temos o posicionamento dos botões iniciais e o controle de movimentos caso o usuário esteja usando o joystick
+
+- **character_selection.py**:
+Caso seja selecionada a opção "Load Game", o usuário é direcionado para a tela que é renderizada nesse arquivo, no qual pode-se notar a presença de paineis que exibem o saves, armazenados em um arquivo json.
+
+- **save_override.py**:
+Se for solicitada a sobreposição de um save anterior, essa classe é chamada e zera os dados armazenados no arquivo json do game escolhido.
+
+- **game_over.py**:
+Quando o player morre, é dada a ele 3 opções: Restart, Exit ou Back to Menu. Nesse arquivo, é desenvolvido tal ação e como proceder com cada escolha.
+
+- **pause.py**:
+É responsável por conter a estruturação do comando de pause do jogo.
+
+#### **Por fim, encontra-se o armazenamento do jogo**:
+
+- **(/saves) & (/levels)**:
+Encontramos os arquivos .json, nos quais armazenamos os dados de saves de jogos anteriores e o mapa de cada level.
+
+- **(/data)**:
+Armazenamento de fontes, imagens e sons solicitados durente o código do jogo. 
 
 ## 📝 Conceitos
 
