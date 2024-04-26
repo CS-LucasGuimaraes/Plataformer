@@ -68,7 +68,7 @@ class Game:
             'player2/idle': Animation(load_images('entities/' + colors[(2+player_color-1)%4] +'/idle'), img_dur=16),
             'player2/run': Animation(load_images('entities/' + colors[(2+player_color-1)%4] + '/run'), img_dur=6),
             'player2/jump': Animation(load_images('entities/' + colors[(2+player_color-1)%4] + '/jump'), img_dur=5),
-            'player2/wall_jump': Animation(load_images('entities/' + colors[(2+player_color)%4] + '/wall_jump'), img_dur=5),
+            'player2/wall_jump': Animation(load_images('entities/' + colors[(2+player_color-1)%4] + '/wall_jump'), img_dur=5),
 
             'player3/idle': Animation(load_images('entities/' + colors[(3+player_color-1)%4] +'/idle'), img_dur=16),
             'player3/run': Animation(load_images('entities/' + colors[(3+player_color-1)%4] + '/run'), img_dur=6),
